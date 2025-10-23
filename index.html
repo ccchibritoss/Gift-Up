@@ -3,73 +3,687 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gift Up - Аренда NFT</title>
+    <title>Gift Up - Premium NFT Rental</title>
     
     <!-- Подключаем Supabase -->
-    <script src="https://unpkg.com/@supabase/supabase-js"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     
     <!-- Подключаем Telegram Web App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
-    <!-- Наши скрипты -->
-    <script src="config.js"></script>
-    <script src="supabase-client.js"></script>
-    <script src="telegram-bot.js"></script>
-    <script src="auth-system.js"></script>
+    <!-- Иконки -->
+    <link href="https://unpkg.com/lucide-static@latest/font/lucide.css" rel="stylesheet">
     
     <style>
-        /* ВСТАВЬ СЮДА ВЕСЬ CSS ИЗ ПРЕДЫДУЩИХ ОТВЕТОВ */
-        /* ... полный CSS код ... */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        :root {
+            --primary: #6366F1;
+            --primary-dark: #4F46E5;
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --background: #0F0F23;
+            --surface: #1A1B3A;
+            --card: #25254E;
+            --text: #FFFFFF;
+            --text-secondary: #94A3B8;
+            --border: #334155;
+            --success: #10B981;
+            --error: #EF4444;
+            --premium: #F59E0B;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--background) 0%, #1E1B4B 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 90px;
+            overflow-x: hidden;
+        }
+        
+        /* Анимированный фон */
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        /* Контейнер */
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+        
+        /* Шапка */
+        .header {
+            padding: 20px 0;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(79, 70, 229, 0.05) 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 24px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3);
+        }
+        
+        .logo-text {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--text), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .tagline {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* Навигация */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 27, 58, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border);
+            display: flex;
+            padding: 12px 16px;
+            z-index: 1000;
+        }
+        
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 8px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .nav-item:hover::before {
+            left: 100%;
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item.active .nav-icon {
+            transform: scale(1.1);
+        }
+        
+        .nav-text {
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        /* Вкладки */
+        .tab-content {
+            display: none;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Сетка подарков */
+        .gifts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 8px;
+        }
+        
+        .gift-card {
+            background: linear-gradient(135deg, var(--card), var(--surface));
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gift-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+        
+        .gift-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .gift-image {
+            width: 100%;
+            height: 140px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            background: linear-gradient(135deg, var(--surface), var(--card));
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gift-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(245, 158, 11, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .gift-card:hover .gift-image::after {
+            opacity: 1;
+        }
+        
+        .gift-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--premium);
+            color: #000;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+        
+        .gift-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+            line-height: 1.2;
+        }
+        
+        .gift-price {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+        
+        .gift-period {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        /* Профиль */
+        .profile-section {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .profile-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            border: 4px solid var(--surface);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .admin-crown {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--premium);
+            color: #000;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+        
+        .user-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .user-id {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, var(--card), var(--surface));
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .info-value {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .status-connected {
+            color: var(--success);
+            font-weight: 600;
+        }
+        
+        .status-disconnected {
+            color: var(--error);
+            font-weight: 600;
+        }
+        
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin: 24px 0;
+        }
+        
+        .btn {
+            padding: 16px 24px;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: var(--text);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--card), var(--surface));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+        }
+        
+        .stat-number {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                backdrop-filter: blur(0px);
+            }
+            to {
+                opacity: 1;
+                backdrop-filter: blur(20px);
+            }
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, var(--surface), var(--card));
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 400px;
+            width: 100%;
+            animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        
+        .modal-subtitle {
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .phone-input-container {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        
+        .country-flag {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+        
+        #phoneInput {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 18px;
+            outline: none;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        /* Анимации */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 380px) {
+            .gifts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="bg-glow"></div>
+    
     <div class="container">
+        <!-- Шапка -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">🎁</div>
+                <div class="logo-text">GiftUp</div>
+            </div>
+            <div class="tagline">Premium NFT Rental Experience</div>
+        </div>
+
         <!-- Вкладка Аренда -->
         <div id="rent" class="tab-content active">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <h1 style="color: #0074D9;">🎁 Gift Up</h1>
-                <p style="color: #B0B0B0;">Аренда эксклюзивных NFT подарков</p>
-                <button onclick="showBotCommands()" class="btn-secondary" style="margin-top: 10px;">
-                    🤖 Команды бота
-                </button>
+            <div class="gifts-grid" id="giftsList">
+                <!-- Подарки загружаются динамически -->
             </div>
-            <div id="giftsList" class="gifts-grid"></div>
         </div>
 
         <!-- Вкладка Профиль -->
         <div id="profile" class="tab-content">
             <div class="profile-section">
-                <div class="avatar" id="userAvatar">👤</div>
-                <h3 id="userName">Загрузка... <span id="adminBadge" class="admin-badge" style="display: none;">ADMIN</span></h3>
+                <div class="profile-header">
+                    <div class="avatar" id="userAvatar">
+                        👤
+                        <div class="admin-crown" id="adminBadge" style="display: none;">👑 ADMIN</div>
+                    </div>
+                    <div class="user-name" id="userName">Загрузка...</div>
+                    <div class="user-id">ID: <span id="userId">---</span></div>
+                </div>
                 
                 <div class="info-card">
                     <div class="info-item">
-                        <span>Баланс:</span>
-                        <strong id="balance">0 TON</strong>
+                        <div class="info-label">
+                            <span>💰</span>
+                            Баланс
+                        </div>
+                        <div class="info-value" id="balance">0 TON</div>
                     </div>
                     
                     <div class="info-item">
-                        <span>Telegram:</span>
-                        <span id="telegramStatus" class="status-disconnected">Не привязан</span>
+                        <div class="info-label">
+                            <span>🔐</span>
+                            Telegram
+                        </div>
+                        <div class="info-value">
+                            <span id="telegramStatus" class="status-disconnected">Не привязан</span>
+                        </div>
                     </div>
                     
                     <div class="info-item">
-                        <span>Телефон:</span>
-                        <span id="phoneDisplay">Не указан</span>
+                        <div class="info-label">
+                            <span>📞</span>
+                            Телефон
+                        </div>
+                        <div class="info-value" id="phoneDisplay">Не указан</div>
                     </div>
                 </div>
 
-                <div class="buttons-container">
-                    <button class="btn-primary" onclick="bindTelegram()" id="bindTelegramBtn">
-                        📱 Привязать Telegram
+                <div class="buttons-grid">
+                    <button class="btn btn-primary" onclick="bindTelegram()" id="bindTelegramBtn">
+                        <span>🔐</span>
+                        Привязать Telegram
                     </button>
-                    <button class="btn-secondary" onclick="showPhoneModal()">
-                        📞 Привязать номер
+                    <button class="btn btn-secondary" onclick="showPhoneModal()">
+                        <span>📞</span>
+                        Привязать номер
                     </button>
                 </div>
 
-                <div class="stats-section">
-                    <h4 style="color: #0074D9; margin-bottom: 15px;">📊 Моя статистика</h4>
+                <div class="info-card">
+                    <h3 style="margin-bottom: 16px; color: var(--text);">📊 Моя статистика</h3>
                     <div class="stats-grid">
                         <div class="stat-card">
                             <div class="stat-number" id="rentedGifts">0</div>
@@ -89,117 +703,211 @@
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchTab('rent')">
             <div class="nav-icon">🏠</div>
-            <span>Аренда</span>
+            <div class="nav-text">Аренда</div>
         </div>
         <div class="nav-item" onclick="switchTab('profile')">
             <div class="nav-icon">👤</div>
-            <span>Профиль</span>
+            <div class="nav-text">Профиль</div>
         </div>
     </div>
 
-    <!-- Модальное окно команд бота -->
-    <div id="botModal" class="modal">
+    <!-- Модальное окно номера телефона -->
+    <div id="phoneModal" class="modal">
         <div class="modal-content">
-            <h3>🤖 Команды бота</h3>
-            <div style="text-align: left; margin: 15px 0;">
-                <p><strong>Для всех:</strong></p>
-                <p>📋 <strong>/gifts</strong> - Список подарков</p>
-                <p>📊 <strong>/stats</strong> - Ваша статистика</p>
-                
-                <p style="margin-top: 15px;"><strong>Только для админа:</strong></p>
-                <p>🎁 <strong>/gift [эмодзи] [Модель] [дни] [цена] [фон] [узор] [видео]</strong></p>
-                <p><em>Пример: /gift 🦍 GoldenApe 7 5 gold pattern https://video.com</em></p>
+            <div class="modal-title">📞 Привязка номера</div>
+            <div class="modal-subtitle">Введите ваш номер телефона</div>
+            
+            <div class="phone-input-container">
+                <span id="countryFlag" class="country-flag">🇷🇺</span>
+                <input type="tel" id="phoneInput" placeholder="+7 900 000-00-00" 
+                       oninput="formatPhoneNumber(this)">
             </div>
-            <div class="modal-buttons">
-                <button class="btn-primary" onclick="closeModal('botModal')">Понятно</button>
+            
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal('phoneModal')" style="flex: 1;">
+                    Отмена
+                </button>
+                <button class="btn btn-primary" onclick="savePhoneNumber()" style="flex: 1;">
+                    Сохранить
+                </button>
             </div>
         </div>
     </div>
 
+    <!-- Подключаем скрипты -->
+    <script src="config.js"></script>
+    <script src="supabase-client.js"></script>
+    <script src="telegram-bot.js"></script>
+    <script src="auth-system.js"></script>
+    <script src="phone-formatter.js"></script>
+    
     <script>
-        // Глобальные переменные
+        // Основная логика приложения
         let userData = {};
-        
+        let currentGifts = [];
+
         // Инициализация приложения
         async function initApp() {
             const tg = window.Telegram.WebApp;
+            
+            // Настраиваем Telegram Web App
             tg.expand();
-            tg.ready();
+            tg.enableClosingConfirmation();
+            tg.setHeaderColor('#1A1B3A');
+            tg.setBackgroundColor('#0F0F23');
             
             // Получаем данные пользователя
             if (tg.initDataUnsafe.user) {
                 userData = {
-                    id: tg.initDataUnsafe.user.id,
+                    id: tg.initDataUnsafe.user.id.toString(),
                     firstName: tg.initDataUnsafe.user.first_name,
                     lastName: tg.initDataUnsafe.user.last_name,
                     username: tg.initDataUnsafe.user.username
                 };
                 
-                // Проверяем админа
-                if (userData.id.toString() === CONFIG.ADMIN_ID) {
-                    document.getElementById('adminBadge').style.display = 'inline';
-                }
-                
-                await updateProfile();
-                await authSystem.updateUI(userData.id);
+                updateUserInterface();
+                await loadGifts();
+                await checkAuthStatus();
             }
             
-            await loadGifts();
+            // Показываем приветствие
+            setTimeout(() => {
+                showWelcomeNotification();
+            }, 1000);
         }
-        
+
+        // Обновление интерфейса пользователя
+        function updateUserInterface() {
+            document.getElementById('userName').textContent = 
+                userData.firstName || 'Пользователь';
+            document.getElementById('userId').textContent = userData.id;
+            
+            // Проверяем админа
+            if (userData.id === CONFIG.ADMIN_ID) {
+                document.getElementById('adminBadge').style.display = 'block';
+            }
+        }
+
         // Загрузка подарков
         async function loadGifts() {
             try {
-                const gifts = await supabaseClient.getGifts();
-                renderGifts(gifts);
+                currentGifts = await window.supabaseClient.getGifts();
+                renderGifts(currentGifts);
             } catch (error) {
-                console.error("Ошибка загрузки подарков:", error);
+                console.error('Ошибка загрузки подарков:', error);
+                showEmptyState();
             }
         }
-        
-        // Аренда подарка
+
+        // Отображение подарков
+        function renderGifts(gifts) {
+            const container = document.getElementById('giftsList');
+            
+            if (gifts.length === 0) {
+                showEmptyState();
+                return;
+            }
+            
+            container.innerHTML = gifts.map(gift => `
+                <div class="gift-card" onclick="showRentModal(${gift.id})">
+                    <div class="gift-image">
+                        ${gift.image}
+                        <div class="gift-badge">PREMIUM</div>
+                    </div>
+                    <div class="gift-name">${gift.model}</div>
+                    <div class="gift-price">${gift.price} TON</div>
+                    <div class="gift-period">
+                        <span>📅</span>
+                        ${gift.days} дней
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Показ состояния "нет подарков"
+        function showEmptyState() {
+            const container = document.getElementById('giftsList');
+            container.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
+                    <div style="font-size: 64px; margin-bottom: 16px;">🎁</div>
+                    <div style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">Подарков пока нет</div>
+                    <div style="color: var(--text-secondary);">Админ добавит подарки скоро!</div>
+                </div>
+            `;
+        }
+
+        // Модальное окно аренды
+        async function showRentModal(giftId) {
+            const gift = currentGifts.find(g => g.id === giftId);
+            if (!gift) return;
+
+            const tg = window.Telegram.WebApp;
+            
+            tg.showPopup({
+                title: `🎁 ${gift.model}`,
+                message: `Хотите арендовать этот премиум подарок?\n\n💎 Модель: ${gift.model}\n💰 Цена: ${gift.price} TON\n📅 Срок: ${gift.days} дней\n🎨 Особенности: ${gift.background} фон, ${gift.pattern} узор`,
+                buttons: [
+                    {
+                        id: 'rent',
+                        type: 'default',
+                        text: `✅ Арендовать за ${gift.price} TON`
+                    },
+                    {
+                        type: 'cancel',
+                        text: '❌ Отмена'
+                    }
+                ]
+            }, async (buttonId) => {
+                if (buttonId === 'rent') {
+                    await rentGift(giftId);
+                }
+            });
+        }
+
+        // Процесс аренды
         async function rentGift(giftId) {
             try {
-                const result = await supabaseClient.rentGift(giftId, userData.id);
+                const result = await window.supabaseClient.rentGift(giftId, userData.id);
                 
                 if (result.success) {
-                    Telegram.WebApp.showAlert("🎉 Подарок успешно арендован!");
-                    await updateProfile();
+                    window.Telegram.WebApp.showAlert('🎉 Подарок успешно арендован!');
+                    await updateUserStats();
                 } else {
-                    Telegram.WebApp.showAlert("❌ Ошибка при аренде");
+                    window.Telegram.WebApp.showAlert('❌ Ошибка при аренде подарка');
                 }
             } catch (error) {
-                Telegram.WebApp.showAlert("❌ Ошибка: " + error.message);
+                window.Telegram.WebApp.showAlert('❌ Ошибка: ' + error.message);
             }
         }
-        
-        // Обновление профиля
-        async function updateProfile() {
-            if (!userData.id) return;
+
+        // Приветственное уведомление
+        function showWelcomeNotification() {
+            const tg = window.Telegram.WebApp;
+            tg.showPopup({
+                title: '🎉 Добро пожаловать!',
+                message: 'Добро пожаловать в GiftUp - платформу премиум аренды NFT!\n\nЗдесь вы можете арендовать эксклюзивные цифровые подарки.',
+                buttons: [{ type: 'default', text: 'Понятно' }]
+            });
+        }
+
+        // Переключение вкладок
+        function switchTab(tabName) {
+            // Скрываем все вкладки
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
             
-            try {
-                const stats = await supabaseClient.getUserStats(userData.id);
-                const userInfo = await supabaseClient.getUserData(userData.id);
-                
-                document.getElementById('userName').textContent = 
-                    userData.firstName + (userData.lastName ? ' ' + userData.lastName : '');
-                document.getElementById('balance').textContent = stats.balance + ' TON';
-                document.getElementById('rentedGifts').textContent = stats.rentedGifts;
-                
-                if (userInfo?.phone) {
-                    document.getElementById('phoneDisplay').textContent = userInfo.phone;
-                }
-            } catch (error) {
-                console.error("Ошибка обновления профиля:", error);
-            }
+            // Показываем выбранную вкладку
+            document.getElementById(tabName).classList.add('active');
+            
+            // Обновляем навигацию
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
         }
-        
-        // Показать команды бота
-        function showBotCommands() {
-            document.getElementById('botModal').style.display = 'flex';
-        }
-        
-        // Инициализация
+
+        // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
