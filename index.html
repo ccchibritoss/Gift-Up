@@ -3,25 +3,330 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gift Up</title>
+    <title>Gift Up - Аренда NFT</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background: #0a0a0a;
+            color: #ffffff;
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        /* Навигация */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #001f3f;
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #0074D9;
+            z-index: 1000;
+        }
+        
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-item.active {
+            background: #0074D9;
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        /* Вкладки */
+        .tab-content {
+            display: none;
+            padding: 15px;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Карточки подарков */
+        .gifts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .gift-card {
+            background: #001f3f;
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid #0074D9;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .gift-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,116,217,0.3);
+        }
+        
+        .gift-image {
+            width: 100%;
+            height: 120px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-bottom: 8px;
+            background: #0074D9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+        
+        .gift-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0074D9;
+            margin-bottom: 4px;
+        }
+        
+        .gift-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #7FDBFF;
+            margin-bottom: 4px;
+        }
+        
+        .gift-period {
+            font-size: 12px;
+            color: #B0B0B0;
+        }
+        
+        /* Профиль */
+        .profile-section {
+            text-align: center;
+        }
+        
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #0074D9;
+            margin: 0 auto 15px;
+            background: #0074D9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+        
+        .info-card {
+            background: #001f3f;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid #0074D9;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .info-item:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .btn-primary {
+            background: #0074D9;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #0074D9;
+            border: 1px solid #0074D9;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(0,116,217,0.1);
+        }
+        
+        .stats-section {
+            margin-top: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .stat-card {
+            background: #001f3f;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #0074D9;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #7FDBFF;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #B0B0B0;
+        }
+        
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: #001f3f;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #0074D9;
+            max-width: 300px;
+            width: 90%;
+            animation: modalAppear 0.3s ease-out;
+        }
+        
+        @keyframes modalAppear {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .phone-input-container {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+        
+        .country-flag {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        
+        #phoneInput {
+            flex: 1;
+            background: #0a0a0a;
+            border: 1px solid #0074D9;
+            border-radius: 6px;
+            padding: 12px;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .admin-badge {
+            background: #ff4444;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 10px;
+            margin-left: 8px;
+        }
+        
+        .status-connected {
+            color: #00ff00;
+        }
+        
+        .status-disconnected {
+            color: #ff4444;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <!-- Вкладка Аренда -->
         <div id="rent" class="tab-content active">
-            <div class="header">
-                <h1>🎁 Аренда подарков</h1>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h1 style="color: #0074D9;">🎁 Gift Up</h1>
+                <p style="color: #B0B0B0;">Аренда эксклюзивных NFT подарков</p>
             </div>
-            <div id="giftsList" class="gifts-grid"></div>
+            <div id="giftsList" class="gifts-grid">
+                <!-- Подарки загружаются через JavaScript -->
+            </div>
         </div>
 
         <!-- Вкладка Профиль -->
         <div id="profile" class="tab-content">
             <div class="profile-section">
-                <img id="userAvatar" class="avatar" src="" alt="Avatar">
-                <h3 id="userName">Загрузка...</h3>
+                <div class="avatar" id="userAvatar">👤</div>
+                <h3 id="userName">Загрузка... <span id="adminBadge" class="admin-badge" style="display: none;">ADMIN</span></h3>
                 
                 <div class="info-card">
                     <div class="info-item">
@@ -31,7 +336,7 @@
                     
                     <div class="info-item">
                         <span>Telegram:</span>
-                        <span id="telegramStatus">Не привязан</span>
+                        <span id="telegramStatus" class="status-disconnected">Не привязан</span>
                     </div>
                     
                     <div class="info-item">
@@ -42,15 +347,15 @@
 
                 <div class="buttons-container">
                     <button class="btn-primary" onclick="bindTelegram()" id="bindTelegramBtn">
-                        Привязать Telegram
+                        📱 Привязать Telegram
                     </button>
                     <button class="btn-secondary" onclick="showPhoneModal()">
-                        Привязать номер
+                        📞 Привязать номер
                     </button>
                 </div>
 
                 <div class="stats-section">
-                    <h4>Мои подарки</h4>
+                    <h4 style="color: #0074D9; margin-bottom: 15px;">📊 Моя статистика</h4>
                     <div class="stats-grid">
                         <div class="stat-card">
                             <div class="stat-number" id="rentedGifts">0</div>
@@ -69,11 +374,11 @@
     <!-- Навигация -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchTab('rent')">
-            <img class="nav-icon" id="rentIcon" alt="Аренда">
+            <div class="nav-icon">🏠</div>
             <span>Аренда</span>
         </div>
         <div class="nav-item" onclick="switchTab('profile')">
-            <img class="nav-icon" id="profileIcon" alt="Профиль">
+            <div class="nav-icon">👤</div>
             <span>Профиль</span>
         </div>
     </div>
@@ -81,7 +386,7 @@
     <!-- Модальное окно номера телефона -->
     <div id="phoneModal" class="modal">
         <div class="modal-content">
-            <h3>Привязка номера телефона</h3>
+            <h3 style="color: #0074D9; margin-bottom: 15px;">📞 Привязка номера</h3>
             <div class="phone-input-container">
                 <span id="countryFlag" class="country-flag">🇷🇺</span>
                 <input type="tel" id="phoneInput" placeholder="+7 900 000-00-00" 
@@ -94,18 +399,244 @@
         </div>
     </div>
 
-    <!-- Модальное окно авторизации Telegram -->
-    <div id="telegramAuthModal" class="modal">
-        <div class="modal-content">
-            <h3>Авторизация Telegram</h3>
-            <div id="authSteps">
-                <!-- Шаги авторизации будут добавляться динамически -->
-            </div>
-        </div>
-    </div>
+    <script>
+        // Конфигурация
+        const CONFIG = {
+            ADMIN_ID: "7773057702"
+        };
 
-    <!-- Подключаем скрипты -->
-    <script src="config.js"></script>
-    <script src="app.js"></script>
+        // Хранилище данных в localStorage
+        const Storage = {
+            get: (key) => {
+                try {
+                    return JSON.parse(localStorage.getItem(key)) || null;
+                } catch {
+                    return localStorage.getItem(key);
+                }
+            },
+            
+            set: (key, value) => {
+                localStorage.setItem(key, JSON.stringify(value));
+            }
+        };
+
+        // Глобальные переменные
+        let userData = {};
+        let gifts = Storage.get('gifts') || [
+            {
+                id: 1,
+                image: "🦍",
+                model: "Golden Ape",
+                days: 7,
+                price: 5,
+                background: "gold",
+                pattern: "ape",
+                video: "",
+                addedBy: "7773057702"
+            },
+            {
+                id: 2,
+                image: "👨‍🎤",
+                model: "Crypto Punk",
+                days: 14,
+                price: 12,
+                background: "blue",
+                pattern: "punk",
+                video: "",
+                addedBy: "7773057702"
+            }
+        ];
+
+        // Инициализация приложения
+        function initApp() {
+            const tg = window.Telegram.WebApp;
+            
+            // Расширяем на весь экран
+            tg.expand();
+            tg.ready();
+            
+            // Получаем данные пользователя
+            if (tg.initDataUnsafe.user) {
+                const user = tg.initDataUnsafe.user;
+                userData = {
+                    id: user.id,
+                    firstName: user.first_name,
+                    lastName: user.last_name,
+                    username: user.username
+                };
+                
+                // Проверяем админа
+                if (user.id.toString() === CONFIG.ADMIN_ID) {
+                    document.getElementById('adminBadge').style.display = 'inline';
+                }
+                
+                updateProfile();
+            }
+            
+            // Загружаем подарки
+            renderGifts();
+            
+            // Сохраняем подарки в localStorage
+            Storage.set('gifts', gifts);
+        }
+
+        // Переключение вкладок
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        // Отображение подарков
+        function renderGifts() {
+            const container = document.getElementById('giftsList');
+            container.innerHTML = '';
+            
+            gifts.forEach(gift => {
+                const giftElement = `
+                    <div class="gift-card" onclick="rentGift(${gift.id})">
+                        <div class="gift-image">${gift.image}</div>
+                        <div class="gift-name">${gift.model}</div>
+                        <div class="gift-price">${gift.price} TON</div>
+                        <div class="gift-period">${gift.days} дней</div>
+                    </div>
+                `;
+                container.innerHTML += giftElement;
+            });
+        }
+
+        // Аренда подарка
+        function rentGift(giftId) {
+            const gift = gifts.find(g => g.id === giftId);
+            if (!gift) return;
+            
+            const tg = window.Telegram.WebApp;
+            tg.showPopup({
+                title: `Аренда ${gift.model}`,
+                message: `Стоимость: ${gift.price} TON\nСрок: ${gift.days} дней\n\nПодтвердить аренду?`,
+                buttons: [
+                    {id: 'confirm', type: 'default', text: '✅ Арендовать'},
+                    {type: 'cancel', text: '❌ Отмена'}
+                ]
+            }, function(buttonId) {
+                if (buttonId === 'confirm') {
+                    tg.showAlert(`🎉 Вы успешно арендовали ${gift.model} за ${gift.price} TON!`);
+                    
+                    // Обновляем статистику
+                    const userStats = Storage.get('userStats') || { rentedGifts: 0, myGifts: 0, balance: 0 };
+                    userStats.rentedGifts += 1;
+                    Storage.set('userStats', userStats);
+                    updateProfile();
+                }
+            });
+        }
+
+        // Привязка Telegram
+        function bindTelegram() {
+            const tg = window.Telegram.WebApp;
+            tg.showAlert('Функция привязки Telegram аккаунта будет доступна в следующем обновлении!');
+            
+            // Имитация успешной привязки для демо
+            setTimeout(() => {
+                document.getElementById('telegramStatus').textContent = 'Привязан';
+                document.getElementById('telegramStatus').className = 'status-connected';
+                document.getElementById('bindTelegramBtn').style.display = 'none';
+            }, 1000);
+        }
+
+        // Работа с номером телефона
+        function showPhoneModal() {
+            document.getElementById('phoneModal').style.display = 'flex';
+            document.getElementById('phoneInput').value = '';
+        }
+
+        function formatPhoneNumber(input) {
+            let value = input.value.replace(/\D/g, '');
+            
+            if (value.startsWith('7') || value.startsWith('8')) {
+                value = '7' + value.substring(1);
+                document.getElementById('countryFlag').textContent = '🇷🇺';
+            } else if (value.startsWith('1')) {
+                document.getElementById('countryFlag').textContent = '🇺🇸';
+            } else if (value.startsWith('44')) {
+                document.getElementById('countryFlag').textContent = '🇬🇧';
+            } else {
+                document.getElementById('countryFlag').textContent = '🏳️';
+            }
+            
+            let formattedValue = '+';
+            
+            if (value.length > 0) {
+                formattedValue += value.substring(0, 1);
+            }
+            if (value.length > 1) {
+                formattedValue += ' (' + value.substring(1, 4);
+            }
+            if (value.length > 4) {
+                formattedValue += ') ' + value.substring(4, 7);
+            }
+            if (value.length > 7) {
+                formattedValue += '-' + value.substring(7, 9);
+            }
+            if (value.length > 9) {
+                formattedValue += '-' + value.substring(9, 11);
+            }
+            
+            input.value = formattedValue;
+        }
+
+        function savePhoneNumber() {
+            const phone = document.getElementById('phoneInput').value;
+            
+            if (!phone || phone.length < 10) {
+                window.Telegram.WebApp.showAlert('Введите корректный номер телефона');
+                return;
+            }
+            
+            Storage.set('userPhone', phone);
+            window.Telegram.WebApp.showAlert('✅ Номер телефона успешно сохранен!');
+            closeModal('phoneModal');
+            updateProfile();
+        }
+
+        // Обновление профиля
+        function updateProfile() {
+            const userStats = Storage.get('userStats') || { rentedGifts: 0, myGifts: 0, balance: 0 };
+            const userPhone = Storage.get('userPhone');
+            
+            if (userData.firstName) {
+                document.getElementById('userName').textContent = userData.firstName + (userData.lastName ? ' ' + userData.lastName : '');
+            }
+            
+            document.getElementById('balance').textContent = userStats.balance + ' TON';
+            document.getElementById('rentedGifts').textContent = userStats.rentedGifts;
+            document.getElementById('myGifts').textContent = userStats.myGifts;
+            
+            if (userPhone) {
+                document.getElementById('phoneDisplay').textContent = userPhone;
+            }
+        }
+
+        // Управление модальными окнами
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Закрытие модальных окон по клику вне их
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
 </body>
 </html>
