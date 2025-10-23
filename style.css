@@ -1,0 +1,270 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+    background: #0a0a0a;
+    color: #ffffff;
+    min-height: 100vh;
+    padding-bottom: 70px;
+}
+
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Навигация */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #001f3f;
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #0074D9;
+    z-index: 1000;
+}
+
+.nav-item {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.nav-item.active {
+    background: #0074D9;
+}
+
+.nav-icon {
+    width: 24px;
+    height: 24px;
+    margin: 0 auto 5px;
+    display: block;
+}
+
+/* Вкладки */
+.tab-content {
+    display: none;
+    padding: 15px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Карточки подарков */
+.gifts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.gift-card {
+    background: #001f3f;
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid #0074D9;
+    cursor: pointer;
+}
+
+.gift-image {
+    width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-bottom: 8px;
+}
+
+.gift-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0074D9;
+    margin-bottom: 4px;
+}
+
+.gift-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #7FDBFF;
+}
+
+.gift-period {
+    font-size: 12px;
+    color: #B0B0B0;
+}
+
+/* Профиль */
+.profile-section {
+    text-align: center;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid #0074D9;
+    margin: 0 auto 15px;
+}
+
+.info-card {
+    background: #001f3f;
+    border-radius: 12px;
+    padding: 15px;
+    margin: 15px 0;
+    border: 1px solid #0074D9;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.info-item:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.btn-primary {
+    background: #0074D9;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #0074D9;
+    border: 1px solid #0074D9;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.stats-section {
+    margin-top: 20px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.stat-card {
+    background: #001f3f;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #0074D9;
+}
+
+.stat-number {
+    font-size: 24px;
+    font-weight: bold;
+    color: #7FDBFF;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #B0B0B0;
+}
+
+/* Модальные окна */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: #001f3f;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #0074D9;
+    max-width: 300px;
+    width: 90%;
+}
+
+.phone-input-container {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.country-flag {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+#phoneInput {
+    flex: 1;
+    background: #0a0a0a;
+    border: 1px solid #0074D9;
+    border-radius: 6px;
+    padding: 12px;
+    color: white;
+    font-size: 16px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* Код авторизации */
+.code-input {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.code-btn {
+    background: #0074D9;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.auth-step {
+    margin: 15px 0;
+    padding: 15px;
+    background: rgba(0,116,217,0.1);
+    border-radius: 8px;
+    border-left: 3px solid #0074D9;
+}
