@@ -1,987 +1,273 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gift Up • Premium NFT Rental</title>
-    
-    <!-- Подключаем Supabase -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    
-    <!-- Подключаем Telegram Web App -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-        
-        :root {
-            --primary: #60A5FA;
-            --primary-glow: #3B82F6;
-            --primary-dark: #1E40AF;
-            --secondary: #6EE7B7;
-            --accent: #FBBF24;
-            --background: #0F172A;
-            --surface: #1E293B;
-            --card: #334155;
-            --text: #F8FAFC;
-            --text-secondary: #94A3B8;
-            --border: #475569;
-            --success: #10B981;
-            --error: #EF4444;
-            --premium: #F59E0B;
-            --glow: rgba(96, 165, 250, 0.15);
-        }
-        
-        body {
-            background: linear-gradient(135deg, var(--background) 0%, #1E293B 100%);
-            color: var(--text);
-            min-height: 100vh;
-            padding-bottom: 80px;
-            overflow-x: hidden;
-        }
-        
-        /* Минималистичный фон с тонким свечением */
-        .bg-glow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(96, 165, 250, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 40%);
-            z-index: -1;
-        }
-        
-        /* Аккуратная верхняя шторка */
-        .header {
-            padding: 12px 0;
-            text-align: center;
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(96, 165, 250, 0.2);
-            margin-bottom: 16px;
-            position: relative;
-        }
-        
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary-glow), transparent);
-            opacity: 0.6;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 4px;
-        }
-        
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            box-shadow: 0 4px 20px var(--glow);
-        }
-        
-        .logo-text {
-            font-size: 22px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--text), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .tagline {
-            color: var(--text-secondary);
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
-        
-        /* Изящная навигация */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(30, 41, 59, 0.95);
-            backdrop-filter: blur(30px);
-            border-top: 1px solid rgba(96, 165, 250, 0.15);
-            display: flex;
-            padding: 10px 16px;
-            z-index: 1000;
-        }
-        
-        .nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            padding: 10px 8px;
-            border-radius: 14px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .nav-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.1), transparent);
-            transition: left 0.6s;
-        }
-        
-        .nav-item:hover::before {
-            left: 100%;
-        }
-        
-        .nav-item.active {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            transform: translateY(-1px);
-            box-shadow: 0 6px 24px var(--glow);
-        }
-        
-        .nav-icon {
-            font-size: 18px;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-item.active .nav-icon {
-            transform: scale(1.1);
-        }
-        
-        .nav-text {
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-        }
-        
-        /* Контент */
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 0 16px;
-        }
-        
-        .tab-content {
-            display: none;
-            animation: fadeInUp 0.5s ease-out;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* Сетка подарков с изящным дизайном */
-        .gifts-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
-            margin-top: 8px;
-        }
-        
-        .gift-card {
-            background: linear-gradient(135deg, var(--card), var(--surface));
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 14px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .gift-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .gift-card:hover {
-            transform: translateY(-6px);
-            border-color: var(--primary);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-        }
-        
-        .gift-card:hover::before {
-            opacity: 1;
-        }
-        
-        .gift-image {
-            width: 100%;
-            height: 130px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(135deg, var(--surface), var(--card));
-            border: 1px solid var(--border);
-        }
-        
-        .gift-badge {
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            background: linear-gradient(135deg, var(--premium), #F59E0B);
-            color: #000;
-            padding: 3px 8px;
-            border-radius: 8px;
-            font-size: 9px;
-            font-weight: 700;
-            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
-        }
-        
-        .gift-name {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 6px;
-            line-height: 1.2;
-        }
-        
-        .gift-price {
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--accent);
-            margin-bottom: 2px;
-        }
-        
-        .gift-period {
-            font-size: 11px;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        /* Премиум профиль */
-        .profile-section {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        
-        .profile-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .avatar {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            margin: 0 auto 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            border: 3px solid var(--surface);
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .avatar-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .admin-crown {
-            position: absolute;
-            top: -6px;
-            right: -6px;
-            background: linear-gradient(135deg, var(--premium), #F59E0B);
-            color: #000;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 9px;
-            font-weight: 700;
-            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
-        }
-        
-        .user-name {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 4px;
-            background: linear-gradient(135deg, var(--text), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .user-id {
-            color: var(--text-secondary);
-            font-size: 13px;
-            font-weight: 500;
-        }
-        
-        .info-card {
-            background: linear-gradient(135deg, var(--card), var(--surface));
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 20px;
-            margin-bottom: 16px;
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .info-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-        }
-        
-        .info-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
-        
-        .info-item:last-child {
-            border-bottom: none;
-        }
-        
-        .info-label {
-            color: var(--text-secondary);
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .info-value {
-            font-weight: 600;
-            font-size: 15px;
-        }
-        
-        .phone-with-flag {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .status-connected {
-            color: var(--success);
-            font-weight: 600;
-        }
-        
-        .status-disconnected {
-            color: var(--error);
-            font-weight: 600;
-        }
-        
-        .buttons-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        
-        .btn {
-            padding: 14px 20px;
-            border: none;
-            border-radius: 14px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn:hover::before {
-            left: 100%;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            box-shadow: 0 6px 20px var(--glow);
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px var(--glow);
-        }
-        
-        .btn-secondary {
-            background: rgba(255,255,255,0.08);
-            color: var(--text);
-            border: 1px solid var(--border);
-            backdrop-filter: blur(10px);
-        }
-        
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.12);
-            transform: translateY(-2px);
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .stat-card {
-            background: linear-gradient(135deg, var(--card), var(--surface));
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 16px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        
-        .stat-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-        }
-        
-        .stat-number {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--accent);
-            margin-bottom: 4px;
-        }
-        
-        .stat-label {
-            font-size: 11px;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-        
-        /* Изящные модальные окна */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            animation: modalFadeIn 0.3s ease-out;
-        }
-        
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                backdrop-filter: blur(0px);
-            }
-            to {
-                opacity: 1;
-                backdrop-filter: blur(20px);
-            }
-        }
-        
-        .modal-content {
-            background: linear-gradient(135deg, var(--surface), var(--card));
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            max-width: 380px;
-            width: 100%;
-            animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .modal-content::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-        }
-        
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95) translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-        
-        .modal-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 6px;
-            text-align: center;
-        }
-        
-        .modal-subtitle {
-            color: var(--text-secondary);
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 13px;
-        }
-        
-        .phone-input-container {
-            display: flex;
-            align-items: center;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 14px;
-            margin: 16px 0;
-        }
-        
-        .country-flag {
-            font-size: 20px;
-            margin-right: 10px;
-        }
-        
-        #phoneInput {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text);
-            font-size: 16px;
-            outline: none;
-        }
-        
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        /* Адаптивность */
-        @media (max-width: 380px) {
-            .gifts-grid {
-                grid-template-columns: 1fr;
-            }
+<script>
+    let userData = {};
+    let currentGifts = [];
+
+    async function initApp() {
+        const tg = window.Telegram.WebApp;
+        
+        // Минималистичная настройка Telegram Web App
+        tg.expand();
+        tg.enableClosingConfirmation();
+        tg.setHeaderColor('#1E293B');
+        tg.setBackgroundColor('#0F172A');
+        
+        if (tg.initDataUnsafe.user) {
+            userData = {
+                id: tg.initDataUnsafe.user.id.toString(),
+                firstName: tg.initDataUnsafe.user.first_name,
+                lastName: tg.initDataUnsafe.user.last_name,
+                username: tg.initDataUnsafe.user.username,
+                photoUrl: tg.initDataUnsafe.user.photo_url
+            };
             
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .container {
-                padding: 0 12px;
-            }
+            updateUserInterface();
+            await loadGifts();
+            await checkAuthStatus();
         }
         
-        /* Тонкая анимация пульсации для премиум эффекта */
-        @keyframes subtlePulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-        
-        .premium-glow {
-            animation: subtlePulse 3s ease-in-out infinite;
-        }
-    </style>
-</head>
-<body>
-    <div class="bg-glow"></div>
-    
-    <div class="container">
-        <!-- Аккуратная шапка -->
-        <div class="header">
-            <div class="logo">
-                <div class="logo-icon">🎁</div>
-                <div class="logo-text">GiftUp</div>
-            </div>
-            <div class="tagline">Premium NFT Rental</div>
-        </div>
-
-        <!-- Вкладка Аренда -->
-        <div id="rent" class="tab-content active">
-            <div class="gifts-grid" id="giftsList">
-                <!-- Подарки загружаются динамически -->
-            </div>
-        </div>
-
-        <!-- Вкладка Профиль -->
-        <div id="profile" class="tab-content">
-            <div class="profile-section">
-                <div class="profile-header">
-                    <div class="avatar" id="userAvatar">
-                        <img src="" alt="Avatar" class="avatar-image" id="avatarImage" style="display: none;">
-                        <div id="avatarPlaceholder">👤</div>
-                        <div class="admin-crown" id="adminBadge" style="display: none;">👑</div>
-                    </div>
-                    <div class="user-name" id="userName">Загрузка...</div>
-                    <div class="user-id">ID: <span id="userId">---</span></div>
-                </div>
-                
-                <div class="info-card">
-                    <div class="info-item">
-                        <div class="info-label">💰 Баланс</div>
-                        <div class="info-value" id="balance">0 TON</div>
-                    </div>
-                    
-                    <div class="info-item">
-                        <div class="info-label">🔐 Telegram</div>
-                        <div class="info-value">
-                            <span id="telegramStatus" class="status-disconnected">Не привязан</span>
-                        </div>
-                    </div>
-                    
-                    <div class="info-item">
-                        <div class="info-label">📞 Телефон</div>
-                        <div class="info-value">
-                            <div class="phone-with-flag" id="phoneDisplay">
-                                <span id="phoneFlag">🇷🇺</span>
-                                <span id="phoneNumber">Не указан</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="buttons-grid">
-                    <button class="btn btn-primary" onclick="bindTelegram()" id="bindTelegramBtn">
-                        <span>🔐</span>
-                        Привязать Telegram
-                    </button>
-                    <button class="btn btn-secondary" onclick="showPhoneModal()">
-                        <span>📞</span>
-                        Привязать номер
-                    </button>
-                </div>
-
-                <div class="info-card">
-                    <h3 style="margin-bottom: 14px; color: var(--text); font-size: 16px;">📊 Моя статистика</h3>
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-number" id="rentedGifts">0</div>
-                            <div class="stat-label">Арендовано</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number" id="myGifts">0</div>
-                            <div class="stat-label">Мои подарки</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Изящная навигация -->
-    <div class="bottom-nav">
-        <div class="nav-item active" onclick="switchTab('rent')">
-            <div class="nav-icon">🏠</div>
-            <div class="nav-text">Аренда</div>
-        </div>
-        <div class="nav-item" onclick="switchTab('profile')">
-            <div class="nav-icon">👤</div>
-            <div class="nav-text">Профиль</div>
-        </div>
-    </div>
-
-    <!-- Модальные окна -->
-    <div id="phoneModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-title">📞 Привязка номера</div>
-            <div class="modal-subtitle">Введите ваш номер телефона для вывода средств</div>
-            
-            <div class="phone-input-container">
-                <span id="countryFlag" class="country-flag">🇷🇺</span>
-                <input type="tel" id="phoneInput" placeholder="+7 900 000-00-00" 
-                       oninput="formatPhoneNumber(this)">
-            </div>
-            
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeModal('phoneModal')" style="flex: 1;">
-                    Отмена
-                </button>
-                <button class="btn btn-primary" onclick="savePhoneNumber()" style="flex: 1;">
-                    Сохранить
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Подключаем скрипты -->
-    <script src="config.js"></script>
-    <script src="supabase-client.js"></script>
-    <script src="auth-system.js"></script>
-    <script src="phone-formatter.js"></script>
-    
-    <script>
-        let userData = {};
-        let currentGifts = [];
-
-        async function initApp() {
-            const tg = window.Telegram.WebApp;
-            
-            // Минималистичная настройка Telegram Web App
-            tg.expand();
-            tg.enableClosingConfirmation();
-            tg.setHeaderColor('#1E293B');
-            tg.setBackgroundColor('#0F172A');
-            
-            if (tg.initDataUnsafe.user) {
-                userData = {
-                    id: tg.initDataUnsafe.user.id.toString(),
-                    firstName: tg.initDataUnsafe.user.first_name,
-                    lastName: tg.initDataUnsafe.user.last_name,
-                    username: tg.initDataUnsafe.user.username,
-                    photoUrl: tg.initDataUnsafe.user.photo_url
-                };
-                
-                updateUserInterface();
-                await loadGifts();
-                await checkAuthStatus();
-            }
-        }
-
-        function updateUserInterface() {
-            document.getElementById('userName').textContent = 
-                userData.firstName || 'Пользователь';
-            document.getElementById('userId').textContent = userData.id;
-            
-            if (userData.photoUrl) {
-                document.getElementById('avatarImage').src = userData.photoUrl;
-                document.getElementById('avatarImage').style.display = 'block';
-                document.getElementById('avatarPlaceholder').style.display = 'none';
-            }
-            
-            if (userData.id === CONFIG.ADMIN_ID) {
-                document.getElementById('adminBadge').style.display = 'block';
-            }
-        }
-
-        async function loadGifts() {
-            try {
-                currentGifts = await window.supabaseClient.getGifts();
-                renderGifts(currentGifts);
-            } catch (error) {
-                console.error('Ошибка загрузки подарков:', error);
-                showEmptyState();
-            }
-        }
-
-        function renderGifts(gifts) {
-            const container = document.getElementById('giftsList');
-            
-            if (gifts.length === 0) {
-                showEmptyState();
-                return;
-            }
-            
-            container.innerHTML = gifts.map(gift => `
-                <div class="gift-card premium-glow" onclick="showRentModal(${gift.id})">
-                    <div class="gift-image" style="background-image: url('${gift.image}')">
-                        <div class="gift-badge">PREMIUM</div>
-                    </div>
-                    <div class="gift-name">${gift.model}</div>
-                    <div class="gift-price">${gift.price} TON</div>
-                    <div class="gift-period">
-                        <span>📅</span>
-                        ${gift.days} дней
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function showEmptyState() {
-            const container = document.getElementById('giftsList');
-            container.innerHTML = `
-                <div style="grid-column: 1 / -1; text-align: center; padding: 50px 16px;">
-                    <div style="font-size: 48px; margin-bottom: 12px;">🎁</div>
-                    <div style="font-size: 18px; font-weight: 600; margin-bottom: 6px; color: var(--text);">Подарков пока нет</div>
-                    <div style="color: var(--text-secondary); font-size: 13px;">Админ добавит подарки скоро!</div>
-                </div>
-            `;
-        }
-
-        async function showRentModal(giftId) {
-            const gift = currentGifts.find(g => g.id === giftId);
-            if (!gift) return;
-
-            const tg = window.Telegram.WebApp;
-            
+        // Показываем приветственное сообщение
+        setTimeout(() => {
             tg.showPopup({
-                title: `🎁 ${gift.model}`,
-                message: `Хотите арендовать этот премиум подарок?\n\n💎 Модель: ${gift.model}\n💰 Цена: ${gift.price} TON\n📅 Срок: ${gift.days} дней`,
-                buttons: [
-                    {
-                        id: 'rent',
-                        type: 'default',
-                        text: `✅ Арендовать за ${gift.price} TON`
-                    },
-                    {
-                        type: 'cancel',
-                        text: '❌ Отмена'
-                    }
-                ]
-            }, async (buttonId) => {
-                if (buttonId === 'rent') {
-                    await rentGift(giftId);
+                title: "🎉 Добро пожаловать!",
+                message: "Добро пожаловать в GiftUp - платформу премиум аренды NFT!",
+                buttons: [{ type: 'default', text: 'Начать' }]
+            });
+        }, 1000);
+    }
+
+    function updateUserInterface() {
+        document.getElementById('userName').textContent = 
+            userData.firstName || 'Пользователь';
+        document.getElementById('userId').textContent = userData.id;
+        
+        if (userData.photoUrl) {
+            document.getElementById('avatarImage').src = userData.photoUrl;
+            document.getElementById('avatarImage').style.display = 'block';
+            document.getElementById('avatarPlaceholder').style.display = 'none';
+        }
+        
+        if (userData.id === CONFIG.ADMIN_ID) {
+            document.getElementById('adminBadge').style.display = 'block';
+        }
+    }
+
+    async function loadGifts() {
+        try {
+            currentGifts = await window.supabaseClient.getGifts();
+            renderGifts(currentGifts);
+        } catch (error) {
+            console.error('Ошибка загрузки подарков:', error);
+            showEmptyState();
+        }
+    }
+
+    function renderGifts(gifts) {
+        const container = document.getElementById('giftsList');
+        
+        if (gifts.length === 0) {
+            showEmptyState();
+            return;
+        }
+        
+        container.innerHTML = gifts.map(gift => `
+            <div class="gift-card premium-glow" onclick="showRentModal(${gift.id})">
+                <div class="gift-image" style="background-image: url('${gift.image}')">
+                    <div class="gift-badge">PREMIUM</div>
+                </div>
+                <div class="gift-name">${gift.model}</div>
+                <div class="gift-price">${gift.price} TON</div>
+                <div class="gift-period">
+                    <span>📅</span>
+                    ${gift.days} дней
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function showEmptyState() {
+        const container = document.getElementById('giftsList');
+        container.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 50px 16px;">
+                <div style="font-size: 48px; margin-bottom: 12px;">🎁</div>
+                <div style="font-size: 18px; font-weight: 600; margin-bottom: 6px; color: var(--text);">Подарков пока нет</div>
+                <div style="color: var(--text-secondary); font-size: 13px;">Админ добавит подарки скоро!</div>
+            </div>
+        `;
+    }
+
+    async function showRentModal(giftId) {
+        const gift = currentGifts.find(g => g.id === giftId);
+        if (!gift) return;
+
+        const tg = window.Telegram.WebApp;
+        
+        tg.showPopup({
+            title: `🎁 ${gift.model}`,
+            message: `Хотите арендовать этот премиум подарок?\n\n💎 Модель: ${gift.model}\n💰 Цена: ${gift.price} TON\n📅 Срок: ${gift.days} дней`,
+            buttons: [
+                {
+                    id: 'rent',
+                    type: 'default',
+                    text: `✅ Арендовать за ${gift.price} TON`
+                },
+                {
+                    type: 'cancel',
+                    text: '❌ Отмена'
                 }
-            });
-        }
-
-        async function rentGift(giftId) {
-            try {
-                const result = await window.supabaseClient.rentGift(giftId, userData.id);
-                
-                if (result.success) {
-                    window.Telegram.WebApp.showAlert('🎉 Подарок успешно арендован!');
-                    await updateUserStats();
-                } else {
-                    window.Telegram.WebApp.showAlert('❌ Ошибка при аренде подарка');
-                }
-            } catch (error) {
-                window.Telegram.WebApp.showAlert('❌ Ошибка: ' + error.message);
+            ]
+        }, async (buttonId) => {
+            if (buttonId === 'rent') {
+                await rentGift(giftId);
             }
-        }
+        });
+    }
 
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
+    async function rentGift(giftId) {
+        try {
+            const result = await window.supabaseClient.rentGift(giftId, userData.id);
             
-            document.getElementById(tabName).classList.add('active');
-            
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            event.currentTarget.classList.add('active');
-        }
-
-        function showModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-
-        function showPhoneModal() {
-            showModal('phoneModal');
-        }
-
-        async function savePhoneNumber() {
-            const phoneInput = document.getElementById('phoneInput');
-            const phone = phoneInput.value.replace(/\D/g, '');
-            
-            if (phone.length < 10) {
-                window.Telegram.WebApp.showAlert('❌ Введите корректный номер телефона');
-                return;
+            if (result.success) {
+                window.Telegram.WebApp.showAlert('🎉 Подарок успешно арендован!');
+                await updateUserStats();
+            } else {
+                window.Telegram.WebApp.showAlert('❌ Ошибка при аренде подарка');
             }
+        } catch (error) {
+            window.Telegram.WebApp.showAlert('❌ Ошибка: ' + error.message);
+        }
+    }
+
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        
+        document.getElementById(tabName).classList.add('active');
+        
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        event.currentTarget.classList.add('active');
+    }
+
+    function showModal(modalId) {
+        document.getElementById(modalId).style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    function showPhoneModal() {
+        showModal('phoneModal');
+    }
+
+    // ИСПРАВЛЕННАЯ ФУНКЦИЯ СОХРАНЕНИЯ НОМЕРА
+    async function savePhoneNumber() {
+        const phoneInput = document.getElementById('phoneInput');
+        let phone = phoneInput.value.replace(/\D/g, '');
+        
+        // Добавляем +7 если номер начинается с 7 или 8
+        if (phone.startsWith('7') && phone.length === 11) {
+            phone = '+7' + phone.substring(1);
+        } else if (phone.startsWith('8') && phone.length === 11) {
+            phone = '+7' + phone.substring(1);
+        } else if (phone.length === 10) {
+            phone = '+7' + phone;
+        }
+        
+        if (phone.length < 12) {
+            window.Telegram.WebApp.showAlert('❌ Введите корректный номер телефона');
+            return;
+        }
+        
+        try {
+            const result = await window.supabaseClient.savePhoneNumber(userData.id, phone);
             
-            try {
-                await window.supabaseClient.savePhoneNumber(userData.id, phone);
+            if (result.success) {
                 await updatePhoneDisplay(phone);
                 closeModal('phoneModal');
                 window.Telegram.WebApp.showAlert('✅ Номер телефона сохранен!');
-            } catch (error) {
-                window.Telegram.WebApp.showAlert('❌ Ошибка сохранения номера');
+            } else {
+                window.Telegram.WebApp.showAlert('❌ Ошибка сохранения номера: ' + result.error);
             }
+        } catch (error) {
+            console.error('Ошибка сохранения:', error);
+            window.Telegram.WebApp.showAlert('❌ Ошибка сохранения номера');
         }
+    }
 
-        async function updatePhoneDisplay(phone) {
-            const flag = getCountryFlag(phone);
-            const formatted = formatPhoneForDisplay(phone);
-            
-            document.getElementById('phoneFlag').textContent = flag;
-            document.getElementById('phoneNumber').textContent = formatted;
-        }
+    async function updatePhoneDisplay(phone) {
+        const flag = getCountryFlag(phone);
+        const formatted = formatPhoneForDisplay(phone);
+        
+        document.getElementById('phoneFlag').textContent = flag;
+        document.getElementById('phoneNumber').textContent = formatted;
+    }
 
-        async function bindTelegram() {
-            const tg = window.Telegram.WebApp;
-            
-            // Редирект на бота для привязки
-            tg.openTelegramLink(`https://t.me/${CONFIG.BOT_USERNAME}?start=bind_${userData.id}`);
-        }
-
-        async function updateUserStats() {
-            try {
-                const stats = await window.supabaseClient.getUserStats(userData.id);
-                document.getElementById('rentedGifts').textContent = stats.rentedGifts;
-                document.getElementById('myGifts').textContent = stats.myGifts || 0;
-                document.getElementById('balance').textContent = stats.balance + ' TON';
-            } catch (error) {
-                console.error('Ошибка обновления статистики:', error);
+    // ИСПРАВЛЕННАЯ ФУНКЦИЯ ПРИВЯЗКИ TELEGRAM
+    async function bindTelegram() {
+        const tg = window.Telegram.WebApp;
+        
+        // Создаем ссылку для привязки с user_id
+        const bindLink = `https://t.me/${CONFIG.BOT_USERNAME}?start=bind_${userData.id}`;
+        
+        console.log('Redirect to:', bindLink);
+        
+        // Показываем подтверждение
+        tg.showPopup({
+            title: "🔗 Привязка Telegram",
+            message: "Сейчас откроется бот для привязки вашего аккаунта. Нажмите 'START' в боте для завершения привязки.",
+            buttons: [
+                {id: 'open_bot', type: 'default', text: '📱 Открыть бота'},
+                {type: 'cancel', text: '❌ Отмена'}
+            ]
+        }, (buttonId) => {
+            if (buttonId === 'open_bot') {
+                // Открываем бота
+                tg.openTelegramLink(bindLink);
+                
+                // Показываем инструкцию
+                setTimeout(() => {
+                    tg.showAlert("📱 Бот открыт! Нажмите 'START' для привязки аккаунта.");
+                }, 1000);
             }
-        }
+        });
+    }
 
-        async function checkAuthStatus() {
-            await window.authSystem.updateUI(userData.id);
+    async function updateUserStats() {
+        try {
+            const stats = await window.supabaseClient.getUserStats(userData.id);
+            document.getElementById('rentedGifts').textContent = stats.rentedGifts;
+            document.getElementById('myGifts').textContent = stats.myGifts || 0;
+            document.getElementById('balance').textContent = stats.balance + ' TON';
+        } catch (error) {
+            console.error('Ошибка обновления статистики:', error);
+        }
+    }
+
+    async function checkAuthStatus() {
+        try {
+            // Проверяем привязку Telegram
+            const bindStatus = await window.supabaseClient.getTelegramBindStatus(userData.id);
+            if (bindStatus) {
+                document.getElementById('telegramStatus').textContent = '✅ Привязан';
+                document.getElementById('telegramStatus').className = 'status-connected';
+                document.getElementById('bindTelegramBtn').textContent = '✅ Telegram привязан';
+                document.getElementById('bindTelegramBtn').disabled = true;
+            }
+            
             await updateUserStats();
             
+            // Загружаем номер телефона если есть
             const userDataFromDb = await window.supabaseClient.getUserData(userData.id);
             if (userDataFromDb && userDataFromDb.phone) {
                 await updatePhoneDisplay(userDataFromDb.phone);
             }
+        } catch (error) {
+            console.error('Ошибка проверки статуса:', error);
         }
+    }
 
-        document.addEventListener('DOMContentLoaded', initApp);
-    </script>
-</body>
-</html>
+    document.addEventListener('DOMContentLoaded', initApp);
+</script>
