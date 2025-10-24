@@ -4,7 +4,6 @@ class SupabaseClient {
         this.client = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
     }
     
-    // Получить все подарки
     async getGifts() {
         const { data, error } = await this.client
             .from('gifts')
@@ -14,7 +13,6 @@ class SupabaseClient {
         return error ? [] : data;
     }
     
-    // Добавить подарок (только админ)
     async addGift(giftData, userId) {
         if (userId !== CONFIG.ADMIN_ID) {
             throw new Error("Access denied");
@@ -36,7 +34,6 @@ class SupabaseClient {
         return { success: !error, error };
     }
     
-    // Арендовать подарок
     async rentGift(giftId, userId) {
         const { data, error } = await this.client
             .from('rentals')
@@ -49,43 +46,62 @@ class SupabaseClient {
         return { success: !error, error };
     }
     
-    // Получить статистику пользователя
     async getUserStats(userId) {
-        const { count, error } = await this.client
+        // Арендованные подарки
+        const { count: rentedCount, error: rentedError } = await this.client
             .from('rentals')
             .select('*', { count: 'exact', head: true })
             .eq('user_id', userId);
         
+        // Мои подарки (если пользователь добавил)
+        const { count: myGiftsCount, error: myGiftsError } = await this.client
+            .from('gifts')
+            .select('*', { count: 'exact', head: true })
+            .eq('added_by', userId);
+        
+        // Баланс (заглушка)
+        const balance = 0;
+        
         return {
-            rentedGifts: error ? 0 : count,
-            balance: 0 // Можно добавить логику баланса
+            rentedGifts: rentedError ? 0 : rentedCount,
+            myGifts: myGiftsError ? 0 : myGiftsCount,
+            balance: balance
         };
     }
     
-    // Сохранить номер телефона
     async savePhoneNumber(userId, phone) {
         const { data, error } = await this.client
             .from('users')
-            .upsert({ 
-                id: userId,
+            .upsert([{
+                user_id: userId,
                 phone: phone,
                 updated_at: new Date().toISOString()
-            });
+            }]);
         
         return { success: !error, error };
     }
     
-    // Получить данные пользователя
     async getUserData(userId) {
         const { data, error } = await this.client
             .from('users')
             .select('*')
-            .eq('id', userId)
+            .eq('user_id', userId)
             .single();
         
         return error ? null : data;
     }
+    
+    async saveAuthSession(userId, sessionData) {
+        const { data, error } = await this.client
+            .from('telegram_sessions')
+            .upsert([{
+                user_id: userId,
+                session_data: sessionData,
+                created_at: new Date().toISOString()
+            }]);
+        
+        return { success: !error, error };
+    }
 }
 
-// Глобальный клиент
 window.supabaseClient = new SupabaseClient();
