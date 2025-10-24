@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gift Up - Premium NFT Rental</title>
+    <title>Gift Up • Premium NFT Rental</title>
     
     <!-- Подключаем Supabase -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     
     <!-- Подключаем Telegram Web App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
-    <!-- Иконки -->
-    <link href="https://unpkg.com/lucide-static@latest/font/lucide.css" rel="stylesheet">
     
     <style>
         * {
@@ -23,29 +20,32 @@
         }
         
         :root {
-            --primary: #6366F1;
-            --primary-dark: #4F46E5;
-            --secondary: #10B981;
-            --accent: #F59E0B;
-            --background: #0F0F23;
-            --surface: #1A1B3A;
-            --card: #25254E;
-            --text: #FFFFFF;
+            --primary: #60A5FA;
+            --primary-glow: #3B82F6;
+            --primary-dark: #1E40AF;
+            --secondary: #6EE7B7;
+            --accent: #FBBF24;
+            --background: #0F172A;
+            --surface: #1E293B;
+            --card: #334155;
+            --text: #F8FAFC;
             --text-secondary: #94A3B8;
-            --border: #334155;
+            --border: #475569;
             --success: #10B981;
             --error: #EF4444;
             --premium: #F59E0B;
+            --glow: rgba(96, 165, 250, 0.15);
         }
         
         body {
-            background: linear-gradient(135deg, var(--background) 0%, #1E1B4B 100%);
+            background: linear-gradient(135deg, var(--background) 0%, #1E293B 100%);
             color: var(--text);
             min-height: 100vh;
-            padding-bottom: 90px;
+            padding-bottom: 80px;
             overflow-x: hidden;
         }
         
+        /* Минималистичный фон с тонким свечением */
         .bg-glow {
             position: fixed;
             top: 0;
@@ -53,50 +53,56 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 10% 20%, rgba(96, 165, 250, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 40%);
             z-index: -1;
         }
         
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 0 16px;
+        /* Аккуратная верхняя шторка */
+        .header {
+            padding: 12px 0;
+            text-align: center;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(96, 165, 250, 0.2);
+            margin-bottom: 16px;
+            position: relative;
         }
         
-        .header {
-            padding: 20px 0;
-            text-align: center;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(79, 70, 229, 0.05) 100%);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 24px;
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-glow), transparent);
+            opacity: 0.6;
         }
         
         .logo {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 8px;
+            gap: 10px;
+            margin-bottom: 4px;
         }
         
         .logo-icon {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3);
+            font-size: 16px;
+            box-shadow: 0 4px 20px var(--glow);
         }
         
         .logo-text {
-            font-size: 28px;
-            font-weight: 800;
+            font-size: 22px;
+            font-weight: 700;
             background: linear-gradient(135deg, var(--text), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -104,21 +110,22 @@
         
         .tagline {
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 500;
+            letter-spacing: 0.5px;
         }
         
-        /* Обновленная навигация с картинками */
+        /* Изящная навигация */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(26, 27, 58, 0.95);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid var(--border);
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(30px);
+            border-top: 1px solid rgba(96, 165, 250, 0.15);
             display: flex;
-            padding: 12px 16px;
+            padding: 10px 16px;
             z-index: 1000;
         }
         
@@ -127,42 +134,61 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
-            padding: 12px 8px;
-            border-radius: 16px;
+            gap: 4px;
+            padding: 10px 8px;
+            border-radius: 14px;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
         
-        .nav-item.active {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3);
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.1), transparent);
+            transition: left 0.6s;
         }
         
-        .nav-image {
-            width: 24px;
-            height: 24px;
-            object-fit: cover;
-            border-radius: 6px;
+        .nav-item:hover::before {
+            left: 100%;
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px var(--glow);
+        }
+        
+        .nav-icon {
+            font-size: 18px;
             transition: all 0.3s ease;
         }
         
-        .nav-item.active .nav-image {
+        .nav-item.active .nav-icon {
             transform: scale(1.1);
         }
         
         .nav-text {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
-            transition: all 0.3s ease;
+            letter-spacing: 0.3px;
+        }
+        
+        /* Контент */
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 16px;
         }
         
         .tab-content {
             display: none;
-            animation: fadeInUp 0.6s ease-out;
+            animation: fadeInUp 0.5s ease-out;
         }
         
         .tab-content.active {
@@ -172,7 +198,7 @@
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(15px);
             }
             to {
                 opacity: 1;
@@ -180,56 +206,75 @@
             }
         }
         
-        /* Обновленная сетка подарков */
+        /* Сетка подарков с изящным дизайном */
         .gifts-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
+            gap: 14px;
             margin-top: 8px;
         }
         
         .gift-card {
             background: linear-gradient(135deg, var(--card), var(--surface));
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 16px;
+            border-radius: 18px;
+            padding: 14px;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
         
+        .gift-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
         .gift-card:hover {
-            transform: translateY(-8px) scale(1.02);
+            transform: translateY(-6px);
             border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .gift-card:hover::before {
+            opacity: 1;
         }
         
         .gift-image {
             width: 100%;
-            height: 140px;
+            height: 130px;
             border-radius: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             background-size: cover;
             background-position: center;
             position: relative;
             overflow: hidden;
+            background: linear-gradient(135deg, var(--surface), var(--card));
+            border: 1px solid var(--border);
         }
         
         .gift-badge {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            background: var(--premium);
+            top: 6px;
+            right: 6px;
+            background: linear-gradient(135deg, var(--premium), #F59E0B);
             color: #000;
-            padding: 4px 8px;
+            padding: 3px 8px;
             border-radius: 8px;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 700;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
         }
         
         .gift-name {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             color: var(--text);
             margin-bottom: 6px;
@@ -237,21 +282,21 @@
         }
         
         .gift-price {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
             color: var(--accent);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         
         .gift-period {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-secondary);
             display: flex;
             align-items: center;
             gap: 4px;
         }
         
-        /* Обновленный профиль */
+        /* Премиум профиль */
         .profile-section {
             max-width: 400px;
             margin: 0 auto;
@@ -259,21 +304,21 @@
         
         .profile-header {
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
         
         .avatar {
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            margin: 0 auto 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            margin: 0 auto 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
-            border: 4px solid var(--surface);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            font-size: 36px;
+            border: 3px solid var(--surface);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
         }
@@ -286,42 +331,59 @@
         
         .admin-crown {
             position: absolute;
-            top: -8px;
-            right: -8px;
-            background: var(--premium);
+            top: -6px;
+            right: -6px;
+            background: linear-gradient(135deg, var(--premium), #F59E0B);
             color: #000;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 9px;
             font-weight: 700;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
         }
         
         .user-name {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             margin-bottom: 4px;
+            background: linear-gradient(135deg, var(--text), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
         .user-id {
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 13px;
+            font-weight: 500;
         }
         
         .info-card {
             background: linear-gradient(135deg, var(--card), var(--surface));
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 20px;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 16px;
             backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
         }
         
         .info-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
         
         .info-item:last-child {
@@ -330,7 +392,7 @@
         
         .info-label {
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 13px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -338,13 +400,13 @@
         
         .info-value {
             font-weight: 600;
-            font-size: 16px;
+            font-size: 15px;
         }
         
         .phone-with-flag {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         
         .status-connected {
@@ -360,15 +422,15 @@
         .buttons-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 12px;
-            margin: 24px 0;
+            gap: 10px;
+            margin: 20px 0;
         }
         
         .btn {
-            padding: 16px 24px;
+            padding: 14px 20px;
             border: none;
-            border-radius: 16px;
-            font-size: 16px;
+            border-radius: 14px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -376,60 +438,83 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
         }
         
         .btn-primary {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 6px 20px var(--glow);
         }
         
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 8px 25px var(--glow);
         }
         
         .btn-secondary {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.08);
             color: var(--text);
             border: 1px solid var(--border);
             backdrop-filter: blur(10px);
         }
         
         .btn-secondary:hover {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.12);
             transform: translateY(-2px);
         }
         
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 24px;
+            gap: 10px;
+            margin-top: 20px;
         }
         
         .stat-card {
             background: linear-gradient(135deg, var(--card), var(--surface));
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 14px;
+            padding: 16px;
             text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
         }
         
         .stat-number {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 800;
             color: var(--accent);
             margin-bottom: 4px;
         }
         
         .stat-label {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-secondary);
             font-weight: 500;
         }
         
-        /* Модальные окна */
+        /* Изящные модальные окна */
         .modal {
             display: none;
             position: fixed;
@@ -437,35 +522,71 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(15, 15, 35, 0.95);
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(20px);
             z-index: 2000;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 16px;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                backdrop-filter: blur(0px);
+            }
+            to {
+                opacity: 1;
+                backdrop-filter: blur(20px);
+            }
         }
         
         .modal-content {
             background: linear-gradient(135deg, var(--surface), var(--card));
             border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 32px;
-            max-width: 400px;
+            border-radius: 20px;
+            padding: 24px;
+            max-width: 380px;
             width: 100%;
+            animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            overflow: hidden;
+        }
+        
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
         
         .modal-title {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             text-align: center;
         }
         
         .modal-subtitle {
             color: var(--text-secondary);
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
+            font-size: 13px;
         }
         
         .phone-input-container {
@@ -473,14 +594,14 @@
             align-items: center;
             background: rgba(255,255,255,0.05);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 16px;
-            margin: 20px 0;
+            border-radius: 14px;
+            padding: 14px;
+            margin: 16px 0;
         }
         
         .country-flag {
-            font-size: 24px;
-            margin-right: 12px;
+            font-size: 20px;
+            margin-right: 10px;
         }
         
         #phoneInput {
@@ -488,62 +609,17 @@
             background: transparent;
             border: none;
             color: var(--text);
-            font-size: 18px;
+            font-size: 16px;
             outline: none;
         }
         
         .modal-actions {
             display: flex;
-            gap: 12px;
-            margin-top: 24px;
+            gap: 10px;
+            margin-top: 20px;
         }
         
-        /* Коды подтверждения */
-        .code-inputs {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-        
-        .code-input {
-            width: 50px;
-            height: 60px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: 600;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            color: var(--text);
-        }
-        
-        .code-input:focus {
-            border-color: var(--primary);
-            outline: none;
-        }
-        
-        .inline-buttons {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin: 16px 0;
-        }
-        
-        .inline-btn {
-            padding: 12px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            color: var(--text);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .inline-btn:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        
+        /* Адаптивность */
         @media (max-width: 380px) {
             .gifts-grid {
                 grid-template-columns: 1fr;
@@ -552,6 +628,20 @@
             .stats-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .container {
+                padding: 0 12px;
+            }
+        }
+        
+        /* Тонкая анимация пульсации для премиум эффекта */
+        @keyframes subtlePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .premium-glow {
+            animation: subtlePulse 3s ease-in-out infinite;
         }
     </style>
 </head>
@@ -559,13 +649,13 @@
     <div class="bg-glow"></div>
     
     <div class="container">
-        <!-- Шапка -->
+        <!-- Аккуратная шапка -->
         <div class="header">
             <div class="logo">
                 <div class="logo-icon">🎁</div>
                 <div class="logo-text">GiftUp</div>
             </div>
-            <div class="tagline">Premium NFT Rental Experience</div>
+            <div class="tagline">Premium NFT Rental</div>
         </div>
 
         <!-- Вкладка Аренда -->
@@ -582,7 +672,7 @@
                     <div class="avatar" id="userAvatar">
                         <img src="" alt="Avatar" class="avatar-image" id="avatarImage" style="display: none;">
                         <div id="avatarPlaceholder">👤</div>
-                        <div class="admin-crown" id="adminBadge" style="display: none;">👑 ADMIN</div>
+                        <div class="admin-crown" id="adminBadge" style="display: none;">👑</div>
                     </div>
                     <div class="user-name" id="userName">Загрузка...</div>
                     <div class="user-id">ID: <span id="userId">---</span></div>
@@ -613,16 +703,18 @@
                 </div>
 
                 <div class="buttons-grid">
-                    <button class="btn btn-primary" onclick="startTelegramAuth()" id="bindTelegramBtn">
-                        🔐 Привязать Telegram
+                    <button class="btn btn-primary" onclick="bindTelegram()" id="bindTelegramBtn">
+                        <span>🔐</span>
+                        Привязать Telegram
                     </button>
                     <button class="btn btn-secondary" onclick="showPhoneModal()">
-                        📞 Привязать номер
+                        <span>📞</span>
+                        Привязать номер
                     </button>
                 </div>
 
                 <div class="info-card">
-                    <h3 style="margin-bottom: 16px; color: var(--text);">📊 Моя статистика</h3>
+                    <h3 style="margin-bottom: 14px; color: var(--text); font-size: 16px;">📊 Моя статистика</h3>
                     <div class="stats-grid">
                         <div class="stat-card">
                             <div class="stat-number" id="rentedGifts">0</div>
@@ -638,19 +730,19 @@
         </div>
     </div>
 
-    <!-- Навигация -->
+    <!-- Изящная навигация -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchTab('rent')">
-            <img src="" alt="Аренда" class="nav-image" id="rentNavImage">
+            <div class="nav-icon">🏠</div>
             <div class="nav-text">Аренда</div>
         </div>
         <div class="nav-item" onclick="switchTab('profile')">
-            <img src="" alt="Профиль" class="nav-image" id="profileNavImage">
+            <div class="nav-icon">👤</div>
             <div class="nav-text">Профиль</div>
         </div>
     </div>
 
-    <!-- Модальное окно номера телефона -->
+    <!-- Модальные окна -->
     <div id="phoneModal" class="modal">
         <div class="modal-content">
             <div class="modal-title">📞 Привязка номера</div>
@@ -673,74 +765,24 @@
         </div>
     </div>
 
-    <!-- Модальное окно кода подтверждения -->
-    <div id="codeModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-title">🔐 Код подтверждения</div>
-            <div class="modal-subtitle">Введите код из Telegram</div>
-            
-            <div class="code-inputs">
-                <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 1)">
-                <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 2)">
-                <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 3)">
-                <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 4)">
-                <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 5)">
-            </div>
-            
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeModal('codeModal')" style="flex: 1;">
-                    Отмена
-                </button>
-                <button class="btn btn-primary" onclick="submitCode()" style="flex: 1;">
-                    Подтвердить
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Модальное окно пароля -->
-    <div id="passwordModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-title">🔒 Введите пароль</div>
-            <div class="modal-subtitle">Аккаунт защищен паролем</div>
-            
-            <input type="password" id="passwordInput" class="code-input" style="width: 100%; margin: 20px 0;" 
-                   placeholder="Введите пароль">
-            
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeModal('passwordModal')" style="flex: 1;">
-                    Отмена
-                </button>
-                <button class="btn btn-primary" onclick="submitPassword()" style="flex: 1;">
-                    Войти
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- Подключаем скрипты -->
     <script src="config.js"></script>
     <script src="supabase-client.js"></script>
-    <script src="telegram-bot.js"></script>
     <script src="auth-system.js"></script>
     <script src="phone-formatter.js"></script>
     
     <script>
         let userData = {};
         let currentGifts = [];
-        let authSession = null;
 
         async function initApp() {
             const tg = window.Telegram.WebApp;
             
+            // Минималистичная настройка Telegram Web App
             tg.expand();
             tg.enableClosingConfirmation();
-            tg.setHeaderColor('#1A1B3A');
-            tg.setBackgroundColor('#0F0F23');
-            
-            // Загружаем картинки для навигации
-            document.getElementById('rentNavImage').src = CONFIG.NAV_IMAGES.RENT;
-            document.getElementById('profileNavImage').src = CONFIG.NAV_IMAGES.PROFILE;
+            tg.setHeaderColor('#1E293B');
+            tg.setBackgroundColor('#0F172A');
             
             if (tg.initDataUnsafe.user) {
                 userData = {
@@ -762,7 +804,6 @@
                 userData.firstName || 'Пользователь';
             document.getElementById('userId').textContent = userData.id;
             
-            // Загружаем аватар
             if (userData.photoUrl) {
                 document.getElementById('avatarImage').src = userData.photoUrl;
                 document.getElementById('avatarImage').style.display = 'block';
@@ -793,7 +834,7 @@
             }
             
             container.innerHTML = gifts.map(gift => `
-                <div class="gift-card" onclick="showRentModal(${gift.id})">
+                <div class="gift-card premium-glow" onclick="showRentModal(${gift.id})">
                     <div class="gift-image" style="background-image: url('${gift.image}')">
                         <div class="gift-badge">PREMIUM</div>
                     </div>
@@ -810,10 +851,10 @@
         function showEmptyState() {
             const container = document.getElementById('giftsList');
             container.innerHTML = `
-                <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
-                    <div style="font-size: 64px; margin-bottom: 16px;">🎁</div>
-                    <div style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">Подарков пока нет</div>
-                    <div style="color: var(--text-secondary);">Скоро появятся новые подарки!</div>
+                <div style="grid-column: 1 / -1; text-align: center; padding: 50px 16px;">
+                    <div style="font-size: 48px; margin-bottom: 12px;">🎁</div>
+                    <div style="font-size: 18px; font-weight: 600; margin-bottom: 6px; color: var(--text);">Подарков пока нет</div>
+                    <div style="color: var(--text-secondary); font-size: 13px;">Админ добавит подарки скоро!</div>
                 </div>
             `;
         }
@@ -912,29 +953,11 @@
             document.getElementById('phoneNumber').textContent = formatted;
         }
 
-        function moveToNext(input, nextIndex) {
-            if (input.value.length === 1) {
-                const nextInput = document.querySelectorAll('.code-input')[nextIndex];
-                if (nextInput) nextInput.focus();
-            }
-        }
-
-        async function startTelegramAuth() {
+        async function bindTelegram() {
             const tg = window.Telegram.WebApp;
             
-            tg.showPopup({
-                title: "🔐 Привязка Telegram",
-                message: "Для полного доступа к функциям нужно привязать аккаунт Telegram",
-                buttons: [
-                    {id: 'start_auth', type: 'default', text: '🚀 Начать привязку'},
-                    {type: 'cancel', text: '❌ Позже'}
-                ]
-            }, async (buttonId) => {
-                if (buttonId === 'start_auth') {
-                    // Здесь будет вызов Python скрипта для начала аутентификации
-                    await window.authSystem.startAdvancedAuth(userData.id);
-                }
-            });
+            // Редирект на бота для привязки
+            tg.openTelegramLink(`https://t.me/${CONFIG.BOT_USERNAME}?start=bind_${userData.id}`);
         }
 
         async function updateUserStats() {
@@ -952,7 +975,6 @@
             await window.authSystem.updateUI(userData.id);
             await updateUserStats();
             
-            // Загружаем номер телефона если есть
             const userDataFromDb = await window.supabaseClient.getUserData(userData.id);
             if (userDataFromDb && userDataFromDb.phone) {
                 await updatePhoneDisplay(userDataFromDb.phone);
