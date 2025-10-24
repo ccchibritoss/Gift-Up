@@ -4,103 +4,99 @@ class SupabaseClient {
         this.client = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
     }
     
-    async getGifts() {
-        const { data, error } = await this.client
-            .from('gifts')
-            .select('*')
-            .order('created_at', { ascending: false });
-        
-        return error ? [] : data;
+    // ИСПРАВЛЕННОЕ сохранение номера телефона
+    async savePhoneNumber(userId, phone) {
+        try {
+            const { data, error } = await this.client
+                .from('users')
+                .upsert({ 
+                    user_id: userId,
+                    phone: phone,
+                    updated_at: new Date().toISOString()
+                });
+            
+            return { success: !error, error };
+        } catch (error) {
+            console.error('Supabase save error:', error);
+            return { success: false, error };
+        }
     }
     
-    async addGift(giftData, userId) {
-        if (userId !== CONFIG.ADMIN_ID) {
-            throw new Error("Access denied");
+    // Получаем статус привязки Telegram
+    async getTelegramBindStatus(userId) {
+        try {
+            const { data, error } = await this.client
+                .from('telegram_binds')
+                .select('*')
+                .eq('user_id', userId)
+                .single();
+            
+            return !error && data;
+        } catch (error) {
+            return false;
         }
-        
-        const { data, error } = await this.client
-            .from('gifts')
-            .insert([{
-                image: giftData.image,
-                model: giftData.model,
-                days: giftData.days,
-                price: giftData.price,
-                background: giftData.background,
-                pattern: giftData.pattern,
-                video: giftData.video,
-                added_by: userId
-            }]);
-        
-        return { success: !error, error };
+    }
+    
+    // Получаем данные пользователя
+    async getUserData(userId) {
+        try {
+            const { data, error } = await this.client
+                .from('users')
+                .select('*')
+                .eq('user_id', userId)
+                .single();
+            
+            return error ? null : data;
+        } catch (error) {
+            return null;
+        }
+    }
+    
+    // Остальные методы
+    async getGifts() {
+        try {
+            const { data, error } = await this.client
+                .from('gifts')
+                .select('*')
+                .order('created_at', { ascending: false });
+            
+            return error ? [] : data;
+        } catch (error) {
+            return [];
+        }
     }
     
     async rentGift(giftId, userId) {
-        const { data, error } = await this.client
-            .from('rentals')
-            .insert([{
-                gift_id: giftId,
-                user_id: userId,
-                rented_at: new Date().toISOString()
-            }]);
-        
-        return { success: !error, error };
+        try {
+            const { data, error } = await this.client
+                .from('rentals')
+                .insert([{
+                    gift_id: giftId,
+                    user_id: userId,
+                    rented_at: new Date().toISOString()
+                }]);
+            
+            return { success: !error, error };
+        } catch (error) {
+            return { success: false, error };
+        }
     }
     
     async getUserStats(userId) {
-        // Арендованные подарки
-        const { count: rentedCount, error: rentedError } = await this.client
-            .from('rentals')
-            .select('*', { count: 'exact', head: true })
-            .eq('user_id', userId);
-        
-        // Мои подарки (если пользователь добавил)
-        const { count: myGiftsCount, error: myGiftsError } = await this.client
-            .from('gifts')
-            .select('*', { count: 'exact', head: true })
-            .eq('added_by', userId);
-        
-        // Баланс (заглушка)
-        const balance = 0;
-        
-        return {
-            rentedGifts: rentedError ? 0 : rentedCount,
-            myGifts: myGiftsError ? 0 : myGiftsCount,
-            balance: balance
-        };
-    }
-    
-    async savePhoneNumber(userId, phone) {
-        const { data, error } = await this.client
-            .from('users')
-            .upsert([{
-                user_id: userId,
-                phone: phone,
-                updated_at: new Date().toISOString()
-            }]);
-        
-        return { success: !error, error };
-    }
-    
-    async getUserData(userId) {
-        const { data, error } = await this.client
-            .from('users')
-            .select('*')
-            .eq('user_id', userId)
-            .single();
-        
-        return error ? null : data;
-    }
-    
-    async saveAuthSession(userId, sessionData) {
-        const { data, error } = await this.client
-            .from('telegram_sessions')
-            .upsert([{
-                user_id: userId,
-                session_data: sessionData,
-                created_at: new Date().toISOString()
-            }]);
-        
-        return { success: !error, error };
+        try {
+            const { count, error } = await this.client
+                .from('rentals')
+                .select('*', { count: 'exact', head: true })
+                .eq('user_id', userId);
+            
+            return {
+                rentedGifts: error ? 0 : count,
+                myGifts: 0,
+                balance: 0
+            };
+        } catch (error) {
+            return { rentedGifts: 0, myGifts: 0, balance: 0 };
+        }
     }
 }
 
