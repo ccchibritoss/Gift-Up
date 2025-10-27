@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +14,7 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 100%);
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
             color: #ffffff;
             min-height: 100vh;
             padding-bottom: 80px;
@@ -24,6 +24,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            margin-top: 20px;
         }
 
         /* Search Section */
@@ -40,8 +41,8 @@
         .search-input {
             width: 100%;
             padding: 15px 50px 15px 20px;
-            background: rgba(13, 17, 28, 0.8);
-            border: 1px solid #2d3748;
+            background: rgba(20, 20, 20, 0.9);
+            border: 1px solid #333;
             border-radius: 12px;
             color: #fff;
             font-size: 1rem;
@@ -51,8 +52,8 @@
 
         .search-input:focus {
             outline: none;
-            border-color: #4cc9f0;
-            box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.1);
+            border-color: #888;
+            box-shadow: 0 0 0 3px rgba(136, 136, 136, 0.1);
         }
 
         .search-icon {
@@ -60,7 +61,7 @@
             right: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: #8b9dc3;
+            color: #888;
             font-size: 1.1rem;
         }
 
@@ -70,9 +71,9 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(17, 17, 17, 0.95);
+            background: rgba(15, 15, 15, 0.95);
             backdrop-filter: blur(10px);
-            border-top: 1px solid #2d3748;
+            border-top: 1px solid #333;
             padding: 15px 0;
             z-index: 1000;
         }
@@ -94,13 +95,13 @@
             padding: 10px 20px;
             border-radius: 12px;
             transition: all 0.3s ease;
-            color: #8b9dc3;
+            color: #888;
             min-width: 80px;
         }
 
         .nav-tab.active {
-            color: #4cc9f0;
-            background: rgba(76, 201, 240, 0.15);
+            color: #fff;
+            background: rgba(255, 255, 255, 0.15);
             transform: translateY(-2px);
         }
 
@@ -132,9 +133,9 @@
         .profile-header {
             text-align: center;
             padding: 40px 0;
-            border-bottom: 1px solid #2d3748;
+            border-bottom: 1px solid #333;
             margin-bottom: 30px;
-            background: rgba(13, 17, 28, 0.6);
+            background: rgba(20, 20, 20, 0.6);
             border-radius: 20px;
             margin-top: 10px;
         }
@@ -143,15 +144,15 @@
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            background: linear-gradient(45deg, #4cc9f0, #4361ee);
+            background: linear-gradient(45deg, #666, #999);
             margin: 0 auto 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2rem;
             font-weight: bold;
-            border: 3px solid rgba(76, 201, 240, 0.3);
-            box-shadow: 0 8px 25px rgba(76, 201, 240, 0.2);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
         }
 
         .user-info {
@@ -162,23 +163,33 @@
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 8px;
-            background: linear-gradient(45deg, #4cc9f0, #4361ee);
+            background: linear-gradient(45deg, #fff, #ccc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .user-id {
-            color: #8b9dc3;
+            color: #888;
             font-size: 1rem;
         }
 
         .balance {
             font-size: 2.2rem;
             font-weight: bold;
-            color: #4cc9f0;
+            color: #fff;
             margin: 25px 0;
-            text-shadow: 0 2px 10px rgba(76, 201, 240, 0.3);
+            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .ton-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
         }
 
         .action-buttons {
@@ -190,10 +201,10 @@
         .action-btn {
             flex: 1;
             padding: 15px 20px;
-            background: linear-gradient(45deg, rgba(30, 58, 138, 0.3), rgba(55, 48, 163, 0.3));
-            border: 1px solid #3730a3;
+            background: linear-gradient(45deg, rgba(50, 50, 50, 0.3), rgba(80, 80, 80, 0.3));
+            border: 1px solid #444;
             border-radius: 12px;
-            color: #e0e7ff;
+            color: #ddd;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -205,10 +216,10 @@
         }
 
         .action-btn:hover {
-            background: linear-gradient(45deg, rgba(30, 58, 138, 0.5), rgba(55, 48, 163, 0.5));
-            border-color: #4cc9f0;
+            background: linear-gradient(45deg, rgba(70, 70, 70, 0.5), rgba(100, 100, 100, 0.5));
+            border-color: #888;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(76, 201, 240, 0.2);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
         }
 
         .nft-section {
@@ -219,24 +230,24 @@
             font-size: 1.4rem;
             margin-bottom: 20px;
             color: #fff;
-            border-bottom: 2px solid #3730a3;
+            border-bottom: 2px solid #444;
             padding-bottom: 10px;
         }
 
         .warning-box {
-            background: rgba(30, 58, 138, 0.2);
-            border: 1px solid #3730a3;
+            background: rgba(50, 50, 50, 0.2);
+            border: 1px solid #444;
             border-radius: 15px;
             padding: 30px;
             text-align: center;
-            color: #a5b4fc;
+            color: #aaa;
             backdrop-filter: blur(10px);
         }
 
         .warning-box i {
             font-size: 2.5rem;
             margin-bottom: 15px;
-            color: #4cc9f0;
+            color: #888;
         }
 
         /* Usernames Grid */
@@ -248,8 +259,8 @@
         }
 
         .username-card {
-            background: rgba(13, 17, 28, 0.8);
-            border: 1px solid #2d3748;
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid #333;
             border-radius: 16px;
             padding: 20px;
             transition: all 0.3s ease;
@@ -265,26 +276,26 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(45deg, #4cc9f0, #4361ee);
+            background: linear-gradient(45deg, #666, #999);
         }
 
         .username-card:hover {
-            border-color: #4cc9f0;
+            border-color: #888;
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(76, 201, 240, 0.15);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
         }
 
         .username-image {
             width: 100%;
             height: 120px;
-            background: linear-gradient(45deg, #1e3a8a, #3730a3);
+            background: linear-gradient(45deg, #333, #555);
             border-radius: 12px;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            border: 1px solid #374151;
+            border: 1px solid #444;
         }
 
         .username-image img {
@@ -302,45 +313,73 @@
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 8px;
-            color: #f8fafc;
+            color: #f8f8f8;
         }
 
         .username-ton {
             font-size: 0.9rem;
-            color: #4cc9f0;
+            color: #aaa;
             margin-bottom: 8px;
             font-family: 'Courier New', monospace;
         }
 
         .username-price {
             font-size: 1.1rem;
-            color: #feca57;
+            color: #ddd;
             margin-bottom: 15px;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .buy-btn {
-            width: 100%;
+        .price-ton-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .username-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .buy-btn, .offer-btn {
+            flex: 1;
             padding: 12px;
-            background: linear-gradient(45deg, #1e3a8a, #3730a3);
             border: none;
             border-radius: 10px;
-            color: #fff;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .buy-btn {
+            background: linear-gradient(45deg, #333, #555);
+            color: #fff;
         }
 
         .buy-btn:hover:not(.disabled) {
-            background: linear-gradient(45deg, #3730a3, #4cc9f0);
+            background: linear-gradient(45deg, #555, #777);
             transform: scale(1.02);
         }
 
-        .buy-btn.disabled {
+        .offer-btn {
+            background: linear-gradient(45deg, #555, #777);
+            color: #fff;
+        }
+
+        .offer-btn:hover:not(.disabled) {
+            background: linear-gradient(45deg, #777, #999);
+            transform: scale(1.02);
+        }
+
+        .buy-btn.disabled, .offer-btn.disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            background: #374151;
+            background: #444;
         }
 
         /* Requisites */
@@ -349,8 +388,8 @@
         }
 
         .requisite-item {
-            background: rgba(30, 58, 138, 0.2);
-            border: 1px solid #3730a3;
+            background: rgba(50, 50, 50, 0.2);
+            border: 1px solid #444;
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 15px;
@@ -361,12 +400,12 @@
         }
 
         .requisite-item:hover {
-            border-color: #4cc9f0;
+            border-color: #888;
             transform: translateX(5px);
         }
 
         .requisite-item i {
-            color: #4cc9f0;
+            color: #888;
             font-size: 1.3rem;
         }
 
@@ -377,11 +416,11 @@
         .requisite-type {
             font-weight: 600;
             margin-bottom: 5px;
-            color: #e0e7ff;
+            color: #ddd;
         }
 
         .requisite-value {
-            color: #a5b4fc;
+            color: #aaa;
             font-size: 0.95rem;
         }
 
@@ -401,8 +440,8 @@
         }
 
         .modal-content {
-            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 100%);
-            border: 1px solid #2d3748;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            border: 1px solid #333;
             border-radius: 20px;
             padding: 30px;
             max-width: 450px;
@@ -425,15 +464,15 @@
         .input-label {
             display: block;
             margin-bottom: 8px;
-            color: #a5b4fc;
+            color: #aaa;
             font-size: 0.95rem;
         }
 
         .modal-input {
             width: 100%;
             padding: 15px;
-            background: rgba(13, 17, 28, 0.8);
-            border: 1px solid #374151;
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid #444;
             border-radius: 10px;
             color: #fff;
             font-size: 1rem;
@@ -442,8 +481,8 @@
 
         .modal-input:focus {
             outline: none;
-            border-color: #4cc9f0;
-            box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.1);
+            border-color: #888;
+            box-shadow: 0 0 0 3px rgba(136, 136, 136, 0.1);
         }
 
         .modal-buttons {
@@ -464,23 +503,23 @@
         }
 
         .modal-btn.primary {
-            background: linear-gradient(45deg, #4cc9f0, #4361ee);
+            background: linear-gradient(45deg, #666, #888);
             color: #000;
         }
 
         .modal-btn.primary:hover {
             transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(76, 201, 240, 0.3);
+            box-shadow: 0 5px 15px rgba(136, 136, 136, 0.3);
         }
 
         .modal-btn.secondary {
-            background: rgba(55, 65, 81, 0.5);
+            background: rgba(70, 70, 70, 0.5);
             color: #fff;
-            border: 1px solid #4b5563;
+            border: 1px solid #555;
         }
 
         .modal-btn.secondary:hover {
-            background: rgba(55, 65, 81, 0.8);
+            background: rgba(90, 90, 90, 0.8);
         }
 
         /* Redirect Modal */
@@ -490,14 +529,14 @@
 
         .redirect-icon {
             font-size: 4rem;
-            color: #4cc9f0;
+            color: #888;
             margin-bottom: 25px;
         }
 
         .redirect-text {
             margin-bottom: 25px;
             line-height: 1.6;
-            color: #a5b4fc;
+            color: #aaa;
             font-size: 1.1rem;
         }
 
@@ -506,8 +545,8 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            background: rgba(13, 17, 28, 0.95);
-            border: 1px solid #2d3748;
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid #333;
             border-radius: 12px;
             padding: 20px;
             max-width: 350px;
@@ -515,7 +554,7 @@
             transition: transform 0.4s ease;
             z-index: 3000;
             backdrop-filter: blur(10px);
-            border-left: 4px solid #4cc9f0;
+            border-left: 4px solid #888;
         }
 
         .notification.show {
@@ -523,27 +562,27 @@
         }
 
         .notification.error {
-            border-left-color: #e74c3c;
+            border-left-color: #cc0000;
         }
 
         .notification.success {
-            border-left-color: #2ecc71;
+            border-left-color: #00aa00;
         }
 
         .notification.warning {
-            border-left-color: #f39c12;
+            border-left-color: #aa7700;
         }
 
         .notification-message {
             font-size: 1rem;
-            color: #e0e7ff;
+            color: #ddd;
         }
 
         /* Username Details */
         .username-details {
             margin-top: 15px;
             padding-top: 15px;
-            border-top: 1px solid #374151;
+            border-top: 1px solid #444;
         }
 
         .detail-item {
@@ -554,12 +593,12 @@
         }
 
         .detail-label {
-            color: #8b9dc3;
+            color: #888;
             flex: 1;
         }
 
         .detail-value {
-            color: #e0e7ff;
+            color: #ddd;
             flex: 2;
             text-align: right;
         }
@@ -568,13 +607,13 @@
         .no-results {
             text-align: center;
             padding: 60px 20px;
-            color: #8b9dc3;
+            color: #888;
         }
 
         .no-results i {
             font-size: 3rem;
             margin-bottom: 20px;
-            color: #4cc9f0;
+            color: #888;
         }
 
         .no-results p {
@@ -610,25 +649,25 @@
 
         .error-icon {
             font-size: 4rem;
-            color: #e74c3c;
+            color: #cc0000;
             margin-bottom: 20px;
         }
 
         .error-title {
             font-size: 1.5rem;
-            color: #e74c3c;
+            color: #cc0000;
             margin-bottom: 15px;
         }
 
         .error-description {
-            color: #a5b4fc;
+            color: #aaa;
             margin-bottom: 25px;
             line-height: 1.5;
         }
 
         .error-details {
-            background: rgba(231, 76, 60, 0.1);
-            border: 1px solid #e74c3c;
+            background: rgba(204, 0, 0, 0.1);
+            border: 1px solid #cc0000;
             border-radius: 8px;
             padding: 15px;
             margin: 15px 0;
@@ -637,7 +676,7 @@
 
         .error-code {
             font-family: 'Courier New', monospace;
-            color: #f8fafc;
+            color: #f8f8f8;
             font-size: 0.9rem;
         }
     </style>
@@ -648,19 +687,19 @@
         <div id="buy-tab" class="tab-content active">
             <div class="search-section">
                 <div class="search-container">
-                    <input type="text" class="search-input" id="search-input" placeholder="Поиск юзернеймов...">
+                    <input type="text" class="search-input" id="search-input" placeholder="Search usernames...">
                     <div class="search-icon">
                         <i class="fas fa-search"></i>
                     </div>
                 </div>
             </div>
             <div class="usernames-grid" id="usernames-grid">
-                <!-- Юзернеймы будут загружены через JavaScript -->
+                <!-- Usernames will be loaded via JavaScript -->
             </div>
             <div id="no-results" class="no-results" style="display: none;">
                 <i class="fas fa-search"></i>
-                <p>Ничего не найдено</p>
-                <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">Попробуйте изменить запрос поиска</p>
+                <p>No results found</p>
+                <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">Try changing your search query</p>
             </div>
         </div>
 
@@ -669,35 +708,38 @@
             <div class="profile-header">
                 <div class="avatar" id="user-avatar">U</div>
                 <div class="user-info">
-                    <div class="user-name" id="user-name">Имя пользователя</div>
+                    <div class="user-name" id="user-name">Username</div>
                     <div class="user-id" id="user-id">ID: --</div>
                 </div>
-                <div class="balance" id="user-balance">0 TON</div>
+                <div class="balance" id="user-balance">
+                    <img src="https://i.postimg.cc/MpvcT8gC/ton.png" alt="TON" class="ton-icon">
+                    0
+                </div>
             </div>
 
             <div class="action-buttons">
                 <button class="action-btn" onclick="connectTelegram()">
                     <i class="fab fa-telegram"></i>
-                    Привязать Telegram
+                    Connect Telegram
                 </button>
                 <button class="action-btn" onclick="showRequisitesModal()">
                     <i class="fas fa-wallet"></i>
-                    Добавить способ оплаты
+                    Add Payment Method
                 </button>
             </div>
 
             <div class="nft-section">
-                <div class="section-title">Мои NFT Юзернеймы</div>
+                <div class="section-title">My NFT Usernames</div>
                 <div class="warning-box">
                     <i class="fas fa-exclamation-triangle"></i>
-                    <p>Привяжите Telegram для просмотра ваших NFT юзернеймов</p>
+                    <p>Connect Telegram to view your NFT usernames</p>
                 </div>
             </div>
 
             <div class="requisites-section">
-                <div class="section-title">Способы оплаты</div>
+                <div class="section-title">Payment Methods</div>
                 <div class="requisites-list" id="requisites-list">
-                    <!-- Реквизиты будут загружены здесь -->
+                    <!-- Requisites will be loaded here -->
                 </div>
             </div>
         </div>
@@ -708,11 +750,11 @@
         <div class="nav-tabs">
             <div class="nav-tab active" onclick="switchTab('buy')">
                 <i class="fas fa-shopping-cart"></i>
-                <span>Покупка</span>
+                <span>Buy</span>
             </div>
             <div class="nav-tab" onclick="switchTab('profile')">
                 <i class="fas fa-user"></i>
-                <span>Профиль</span>
+                <span>Profile</span>
             </div>
         </div>
     </div>
@@ -720,14 +762,14 @@
     <!-- Requisites Modal -->
     <div id="requisites-modal" class="modal">
         <div class="modal-content">
-            <div class="modal-title">Добавить способ оплаты</div>
+            <div class="modal-title">Add Payment Method</div>
             
             <div class="requisite-option input-group" onclick="selectRequisite('ton')">
                 <div class="requisite-item">
                     <i class="fas fa-coins"></i>
                     <div class="requisite-info">
-                        <div class="requisite-type">TON кошелек</div>
-                        <div class="requisite-value">Криптовалютный кошелек TON</div>
+                        <div class="requisite-type">TON Wallet</div>
+                        <div class="requisite-value">TON cryptocurrency wallet</div>
                     </div>
                 </div>
             </div>
@@ -737,7 +779,7 @@
                     <i class="fas fa-star"></i>
                     <div class="requisite-info">
                         <div class="requisite-type">Telegram Stars</div>
-                        <div class="requisite-value">Юзернейм для получения Stars</div>
+                        <div class="requisite-value">Username for receiving Stars</div>
                     </div>
                 </div>
             </div>
@@ -746,7 +788,7 @@
                 <div class="requisite-item">
                     <i class="fas fa-credit-card"></i>
                     <div class="requisite-info">
-                        <div class="requisite-type">Банковская карта</div>
+                        <div class="requisite-type">Bank Card</div>
                         <div class="requisite-value">Visa/Mastercard</div>
                     </div>
                 </div>
@@ -757,14 +799,14 @@
     <!-- TON Modal -->
     <div id="ton-modal" class="modal">
         <div class="modal-content">
-            <div class="modal-title">Добавить TON кошелек</div>
+            <div class="modal-title">Add TON Wallet</div>
             <div class="input-group">
-                <label class="input-label">Адрес TON кошелька</label>
-                <input type="text" class="modal-input" id="ton-address" placeholder="Введите адрес TON кошелька">
+                <label class="input-label">TON Wallet Address</label>
+                <input type="text" class="modal-input" id="ton-address" placeholder="Enter TON wallet address">
             </div>
             <div class="modal-buttons">
-                <button class="modal-btn secondary" onclick="closeModal('ton-modal')">Отмена</button>
-                <button class="modal-btn primary" onclick="saveTON()">Сохранить</button>
+                <button class="modal-btn secondary" onclick="closeModal('ton-modal')">Cancel</button>
+                <button class="modal-btn primary" onclick="saveTON()">Save</button>
             </div>
         </div>
     </div>
@@ -772,14 +814,14 @@
     <!-- Stars Modal -->
     <div id="stars-modal" class="modal">
         <div class="modal-content">
-            <div class="modal-title">Добавить Telegram Stars</div>
+            <div class="modal-title">Add Telegram Stars</div>
             <div class="input-group">
-                <label class="input-label">Telegram юзернейм</label>
+                <label class="input-label">Telegram Username</label>
                 <input type="text" class="modal-input" id="stars-username" placeholder="@username">
             </div>
             <div class="modal-buttons">
-                <button class="modal-btn secondary" onclick="closeModal('stars-modal')">Отмена</button>
-                <button class="modal-btn primary" onclick="saveStars()">Сохранить</button>
+                <button class="modal-btn secondary" onclick="closeModal('stars-modal')">Cancel</button>
+                <button class="modal-btn primary" onclick="saveStars()">Save</button>
             </div>
         </div>
     </div>
@@ -787,22 +829,22 @@
     <!-- Card Modal -->
     <div id="card-modal" class="modal">
         <div class="modal-content">
-            <div class="modal-title">Добавить банковскую карту</div>
+            <div class="modal-title">Add Bank Card</div>
             <div class="input-group">
-                <label class="input-label">Номер карты</label>
+                <label class="input-label">Card Number</label>
                 <input type="text" class="modal-input" id="card-number" placeholder="0000 0000 0000 0000">
             </div>
             <div class="input-group">
-                <label class="input-label">Срок действия</label>
-                <input type="text" class="modal-input" id="card-expiry" placeholder="ММ/ГГ">
+                <label class="input-label">Expiry Date</label>
+                <input type="text" class="modal-input" id="card-expiry" placeholder="MM/YY">
             </div>
             <div class="input-group">
-                <label class="input-label">Имя владельца</label>
-                <input type="text" class="modal-input" id="card-name" placeholder="Иван Иванов">
+                <label class="input-label">Cardholder Name</label>
+                <input type="text" class="modal-input" id="card-name" placeholder="John Doe">
             </div>
             <div class="modal-buttons">
-                <button class="modal-btn secondary" onclick="closeModal('card-modal')">Отмена</button>
-                <button class="modal-btn primary" onclick="saveCard()">Сохранить</button>
+                <button class="modal-btn secondary" onclick="closeModal('card-modal')">Cancel</button>
+                <button class="modal-btn primary" onclick="saveCard()">Save</button>
             </div>
         </div>
     </div>
@@ -813,14 +855,14 @@
             <div class="redirect-icon">
                 <i class="fab fa-telegram"></i>
             </div>
-            <div class="modal-title">Подключение Telegram</div>
+            <div class="modal-title">Telegram Connection</div>
             <div class="redirect-text">
-                Вы будете перенаправлены в Telegram для привязки аккаунта.<br>
-                Процесс верификации начнется автоматически.
+                You will be redirected to Telegram to link your account.<br>
+                The verification process will start automatically.
             </div>
             <div class="modal-buttons">
-                <button class="modal-btn primary" onclick="openTelegram()">Открыть Telegram</button>
-                <button class="modal-btn secondary" onclick="closeModal('redirect-modal')">Отмена</button>
+                <button class="modal-btn primary" onclick="openTelegram()">Open Telegram</button>
+                <button class="modal-btn secondary" onclick="closeModal('redirect-modal')">Cancel</button>
             </div>
         </div>
     </div>
@@ -830,12 +872,12 @@
         <div class="modal-content redirect-modal">
             <div class="loading-text">
                 <div class="loading-spinner"></div>
-                <div>Привязка аккаунта...</div>
+                <div>Linking account...</div>
             </div>
             <div class="redirect-text">
-                Пожалуйста, подождите. Идет процесс привязки вашего Telegram аккаунта.
+                Please wait. Your Telegram account is being linked.
                 <br><br>
-                <small>Это займет около 10 секунд</small>
+                <small>This will take about 10 seconds</small>
             </div>
         </div>
     </div>
@@ -846,86 +888,89 @@
             <div class="error-icon">
                 <i class="fas fa-exclamation-triangle"></i>
             </div>
-            <div class="error-title">Ошибка привязки</div>
+            <div class="error-title">Connection Error</div>
             <div class="error-description">
-                Не удалось привязать Telegram аккаунт.<br>
-                Сервис временно недоступен.
+                Failed to link Telegram account.<br>
+                Service is temporarily unavailable.
             </div>
             <div class="error-details">
-                <div><strong>Код ошибки:</strong></div>
+                <div><strong>Error Code:</strong></div>
                 <div class="error-code">API_ID_BLOCKED: This API id was published somewhere, you can't use it now</div>
             </div>
             <div class="modal-buttons">
-                <button class="modal-btn primary" onclick="retryConnection()">Попробовать снова</button>
-                <button class="modal-btn secondary" onclick="closeSupport()">Связаться с поддержкой</button>
+                <button class="modal-btn primary" onclick="retryConnection()">Try Again</button>
+                <button class="modal-btn secondary" onclick="closeSupport()">Contact Support</button>
             </div>
         </div>
     </div>
 
     <!-- Notification -->
     <div id="notification" class="notification">
-        <div class="notification-message" id="notification-message">Сообщение уведомления</div>
+        <div class="notification-message" id="notification-message">Notification message</div>
     </div>
 
     <script>
-        // Конфигурация бота - ИСПРАВЛЕНО: теперь используется команда /verify
+        // Bot configuration - FIXED: now using /verify command
         const BOT_USERNAME = "UsersMarketRubot";
-        const START_COMMAND = "verify"; // Теперь используется /verify вместо /start
+        const START_COMMAND = "verify"; // Now using /verify instead of /start
 
-        // Пример данных юзернеймов с фотографиями и TON адресами
+        // TON icon URL
+        const TON_ICON_URL = "https://i.postimg.cc/MpvcT8gC/ton.png";
+
+        // Example username data with photos and TON addresses
         const usernames = [
             { 
                 name: "@premium", 
-                price: "150 TON", 
+                price: "150", 
                 image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=400&h=300&fit=crop",
                 tonAddress: "premium.ton",
                 owner: "0x742d35Cc..."
             },
             { 
                 name: "@crypto", 
-                price: "120 TON", 
+                price: "120", 
                 image: "https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=400&h=300&fit=crop",
                 tonAddress: "crypto.ton",
                 owner: "0x8934F5a3..."
             },
             { 
                 name: "@vip", 
-                price: "200 TON", 
+                price: "200", 
                 image: "https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?w=400&h=300&fit=crop",
                 tonAddress: "vip.ton",
                 owner: "0x4567A2b1..."
             },
             { 
                 name: "@elite", 
-                price: "180 TON", 
+                price: "180", 
                 image: "https://images.unsplash.com/photo-1550684376-efcbd6e3f031?w=400&h=300&fit=crop",
                 tonAddress: "elite.ton",
                 owner: "0x7890C3d4..."
             },
             { 
                 name: "@alpha", 
-                price: "90 TON", 
+                price: "90", 
                 image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=300&fit=crop",
                 tonAddress: "alpha.ton",
                 owner: "0x1234E5f6..."
             },
             { 
                 name: "@omega", 
-                price: "95 TON", 
+                price: "95", 
                 image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
                 tonAddress: "omega.ton",
                 owner: "0x5678G9h0..."
             },
             { 
                 name: "@gold", 
-                price: "250 TON", 
+                price: "250", 
                 image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=400&h=300&fit=crop",
                 tonAddress: "gold.ton",
                 owner: "0x9101J2k3..."
             },
             { 
                 name: "@diamond", 
-                price: "300 TON", 
+                price: "300", 
                 image: "https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=400&h=300&fit=crop",
                 tonAddress: "diamond.ton",
                 owner: "0x2345L6m7..."
@@ -933,14 +978,14 @@
         ];
 
         let userData = {
-            name: "Имя пользователя",
+            name: "Username",
             id: "--",
             balance: 0,
             telegramConnected: false,
             requisites: []
         };
 
-        // Поиск
+        // Search
         function setupSearch() {
             const searchInput = document.getElementById('search-input');
             searchInput.addEventListener('input', function(e) {
@@ -973,7 +1018,7 @@
             }
         }
 
-        // Переключение вкладок
+        // Tab switching
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
@@ -992,7 +1037,7 @@
             }
         }
 
-        // Загрузка юзернеймов
+        // Loading usernames
         function loadUsernames() {
             renderUsernames(usernames);
         }
@@ -1010,51 +1055,77 @@
                     </div>
                     <div class="username-name">${username.name}</div>
                     <div class="username-ton">${username.tonAddress}</div>
-                    <div class="username-price">${username.price}</div>
+                    <div class="username-price">
+                        <img src="${TON_ICON_URL}" alt="TON" class="price-ton-icon">
+                        ${username.price}
+                    </div>
                     
                     <div class="username-details">
                         <div class="detail-item">
-                            <span class="detail-label">Владелец:</span>
+                            <span class="detail-label">Owner:</span>
                             <span class="detail-value">${username.owner}</span>
                         </div>
                     </div>
                     
-                    <button class="buy-btn" onclick="handleBuyClick('${username.name}')">
-                        Купить сейчас
-                    </button>
+                    <div class="username-actions">
+                        <button class="buy-btn" onclick="handleBuyClick('${username.name}')">
+                            Buy Now
+                        </button>
+                        <button class="offer-btn" onclick="handleOfferClick('${username.name}')">
+                            Offer
+                        </button>
+                    </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        // Обработка клика на кнопку покупки
+        // Handle buy button click
         function handleBuyClick(username) {
             if (!userData.telegramConnected) {
-                showNotification('Сначала привяжите Telegram аккаунт', 'error');
+                showNotification('First connect your Telegram account', 'error');
                 return;
             }
             
-            // Показываем ошибку покупки
-            showNotification(`Ошибка: Покупка юзернейма ${username} временно недоступна. Попробуйте позже.`, 'error');
+            // Show purchase error
+            showNotification(`Error: Purchase of username ${username} is temporarily unavailable. Try again later.`, 'error');
         }
 
-        // Обновление профиля
+        // Handle offer button click
+        function handleOfferClick(username) {
+            if (!userData.telegramConnected) {
+                showNotification('Please connect your Telegram account to make offers', 'warning');
+                return;
+            }
+            
+            showNotification(`Offer functionality for ${username} will be available soon`, 'info');
+        }
+
+        // Update profile
         function updateProfile() {
             document.getElementById('user-name').textContent = userData.name;
             document.getElementById('user-id').textContent = `ID: ${userData.id}`;
-            document.getElementById('user-balance').textContent = `${userData.balance} TON`;
+            document.getElementById('user-balance').innerHTML = `
+                <img src="${TON_ICON_URL}" alt="TON" class="ton-icon">
+                ${userData.balance}
+            `;
             document.getElementById('user-avatar').textContent = userData.name.charAt(0).toUpperCase();
             
-            // Обновление списка реквизитов
+            // Update requisites list
             const requisitesList = document.getElementById('requisites-list');
             if (userData.requisites.length === 0) {
-                requisitesList.innerHTML = '<div class="warning-box"><p>Способы оплаты не добавлены</p></div>';
+                requisitesList.innerHTML = `
+                    <div class="warning-box">
+                        <i class="fas fa-info-circle"></i>
+                        <p>No payment methods added yet</p>
+                    </div>
+                `;
             } else {
                 requisitesList.innerHTML = userData.requisites.map(req => `
                     <div class="requisite-item">
-                        <i class="fas fa-${getRequisiteIcon(req.type)}"></i>
+                        <i class="${req.icon}"></i>
                         <div class="requisite-info">
-                            <div class="requisite-type">${getRequisiteName(req.type)}</div>
+                            <div class="requisite-type">${req.type}</div>
                             <div class="requisite-value">${req.value}</div>
                         </div>
                     </div>
@@ -1062,52 +1133,20 @@
             }
         }
 
-        function getRequisiteIcon(type) {
-            const icons = {
-                'ton': 'coins',
-                'stars': 'star',
-                'card': 'credit-card'
-            };
-            return icons[type] || 'wallet';
-        }
-
-        function getRequisiteName(type) {
-            const names = {
-                'ton': 'TON кошелек',
-                'stars': 'Telegram Stars',
-                'card': 'Банковская карта'
-            };
-            return names[type] || type;
-        }
-
-        // Подключение Telegram с имитацией ошибки
+        // Telegram connection
         function connectTelegram() {
-            document.getElementById('redirect-modal').style.display = 'flex';
+            showModal('redirect-modal');
         }
 
         function openTelegram() {
-            // Показываем loading
             closeModal('redirect-modal');
-            document.getElementById('loading-modal').style.display = 'flex';
+            showModal('loading-modal');
             
-            // Пытаемся открыть Telegram с командой /verify
-            const telegramUrl = `https://t.me/${BOT_USERNAME}?start=${START_COMMAND}`;
-            window.location.href = `tg://resolve?domain=${BOT_USERNAME}&start=${START_COMMAND}`;
-            
-            // Резервное открытие в браузере
+            // Simulate connection process
             setTimeout(() => {
-                window.open(telegramUrl, '_blank');
-            }, 500);
-            
-            // Имитация ошибки через 10 секунд на странице
-            setTimeout(() => {
-                showConnectionError();
-            }, 10000);
-        }
-
-        function showConnectionError() {
-            closeModal('loading-modal');
-            document.getElementById('error-modal').style.display = 'flex';
+                closeModal('loading-modal');
+                showModal('error-modal');
+            }, 3000);
         }
 
         function retryConnection() {
@@ -1117,75 +1156,104 @@
 
         function closeSupport() {
             closeModal('error-modal');
-            // Открываем поддержку
-            window.open('https://t.me/donkiwc', '_blank');
+            showNotification('Support contact information will be available soon', 'info');
         }
 
-        // Симуляция успешного подключения (для тестирования)
-        function simulateTelegramConnection() {
-            userData.telegramConnected = true;
-            userData.name = "Александр Петров";
-            userData.id = "7773057702";
-            userData.balance = 150;
-            updateProfile();
-            loadUsernames();
-            showNotification('Telegram успешно подключен! Теперь вы можете просматривать юзернеймы.', 'success');
-        }
-
-        // Функции модальных окон
+        // Requisites management
         function showRequisitesModal() {
-            document.getElementById('requisites-modal').style.display = 'flex';
+            showModal('requisites-modal');
+        }
+
+        function selectRequisite(type) {
+            closeModal('requisites-modal');
+            
+            switch(type) {
+                case 'ton':
+                    showModal('ton-modal');
+                    break;
+                case 'stars':
+                    showModal('stars-modal');
+                    break;
+                case 'card':
+                    showModal('card-modal');
+                    break;
+            }
+        }
+
+        function saveTON() {
+            const address = document.getElementById('ton-address').value.trim();
+            if (!address) {
+                showNotification('Please enter TON wallet address', 'error');
+                return;
+            }
+            
+            userData.requisites.push({
+                type: 'TON Wallet',
+                value: address,
+                icon: 'fas fa-coins'
+            });
+            
+            closeModal('ton-modal');
+            showNotification('TON wallet added successfully', 'success');
+            updateProfile();
+        }
+
+        function saveStars() {
+            const username = document.getElementById('stars-username').value.trim();
+            if (!username) {
+                showNotification('Please enter Telegram username', 'error');
+                return;
+            }
+            
+            userData.requisites.push({
+                type: 'Telegram Stars',
+                value: username,
+                icon: 'fas fa-star'
+            });
+            
+            closeModal('stars-modal');
+            showNotification('Telegram Stars account added successfully', 'success');
+            updateProfile();
+        }
+
+        function saveCard() {
+            const number = document.getElementById('card-number').value.trim();
+            const expiry = document.getElementById('card-expiry').value.trim();
+            const name = document.getElementById('card-name').value.trim();
+            
+            if (!number || !expiry || !name) {
+                showNotification('Please fill all card details', 'error');
+                return;
+            }
+            
+            userData.requisites.push({
+                type: 'Bank Card',
+                value: `${number} (${expiry})`,
+                icon: 'fas fa-credit-card'
+            });
+            
+            closeModal('card-modal');
+            showNotification('Bank card added successfully', 'success');
+            updateProfile();
+        }
+
+        // Modal functions
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
         }
 
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
         }
 
-        function selectRequisite(type) {
-            closeModal('requisites-modal');
-            document.getElementById(type + '-modal').style.display = 'flex';
-        }
-
-        function saveTON() {
-            const address = document.getElementById('ton-address').value;
-            if (address) {
-                userData.requisites.push({ type: 'ton', value: address });
-                updateProfile();
-                closeModal('ton-modal');
-                showNotification('TON кошелек добавлен', 'success');
-            }
-        }
-
-        function saveStars() {
-            const username = document.getElementById('stars-username').value;
-            if (username) {
-                userData.requisites.push({ type: 'stars', value: username });
-                updateProfile();
-                closeModal('stars-modal');
-                showNotification('Юзернейм для Stars добавлен', 'success');
-            }
-        }
-
-        function saveCard() {
-            const number = document.getElementById('card-number').value;
-            const expiry = document.getElementById('card-expiry').value;
-            const name = document.getElementById('card-name').value;
-            
-            if (number && expiry && name) {
-                userData.requisites.push({ type: 'card', value: `**** ${number.slice(-4)} (${name})` });
-                updateProfile();
-                closeModal('card-modal');
-                showNotification('Банковская карта добавлена', 'success');
-            }
-        }
-
-        // Система уведомлений
+        // Notification system
         function showNotification(message, type = 'info') {
             const notification = document.getElementById('notification');
-            const messageEl = document.getElementById('notification-message');
+            const messageElement = document.getElementById('notification-message');
             
-            messageEl.textContent = message;
-            notification.className = `notification ${type}`;
+            messageElement.textContent = message;
+            notification.className = 'notification';
+            notification.classList.add(type);
             notification.classList.add('show');
             
             setTimeout(() => {
@@ -1193,18 +1261,20 @@
             }, 4000);
         }
 
-        // Закрытие модальных окон при клике вне
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
-            }
-        }
-
-        // Инициализация
-        document.addEventListener('DOMContentLoaded', () => {
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
             loadUsernames();
             updateProfile();
             setupSearch();
+            
+            // Close modals when clicking outside
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.style.display = 'none';
+                    }
+                });
+            });
         });
     </script>
 </body>
