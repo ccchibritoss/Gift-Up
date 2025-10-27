@@ -239,10 +239,10 @@
             color: #4cc9f0;
         }
 
-        /* Usernames Grid */
+        /* Usernames Grid - ИЗМЕНЕНО: 3 колонки */
         .usernames-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             margin-top: 25px;
         }
@@ -317,6 +317,22 @@
             color: #feca57;
             margin-bottom: 15px;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ton-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #0088cc, #00aaff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
         }
 
         .buy-btn {
@@ -539,7 +555,7 @@
             color: #e0e7ff;
         }
 
-        /* Username Details */
+        /* Username Details - УДАЛЕНО: редкость и дата создания */
         .username-details {
             margin-top: 15px;
             padding-top: 15px;
@@ -639,6 +655,25 @@
             font-family: 'Courier New', monospace;
             color: #f8fafc;
             font-size: 0.9rem;
+        }
+
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 768px) {
+            .usernames-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .usernames-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -876,75 +911,66 @@
         const usernames = [
             { 
                 name: "@premium", 
-                price: "150 TON", 
+                price: "150", 
                 image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=400&h=300&fit=crop",
                 tonAddress: "premium.ton",
-                owner: "0x742d35Cc...",
-                created: "2024-01-15",
-                rarity: "Rare"
+                owner: "0x742d35Cc..."
             },
             { 
                 name: "@crypto", 
-                price: "120 TON", 
+                price: "120", 
                 image: "https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=400&h=300&fit=crop",
                 tonAddress: "crypto.ton",
-                owner: "0x8934F5a3...",
-                created: "2024-01-14",
-                rarity: "Uncommon"
+                owner: "0x8934F5a3..."
             },
             { 
                 name: "@vip", 
-                price: "200 TON", 
+                price: "200", 
                 image: "https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?w=400&h=300&fit=crop",
                 tonAddress: "vip.ton",
-                owner: "0x4567A2b1...",
-                created: "2024-01-13",
-                rarity: "Epic"
+                owner: "0x4567A2b1..."
             },
             { 
                 name: "@elite", 
-                price: "180 TON", 
+                price: "180", 
                 image: "https://images.unsplash.com/photo-1550684376-efcbd6e3f031?w=400&h=300&fit=crop",
                 tonAddress: "elite.ton",
-                owner: "0x7890C3d4...",
-                created: "2024-01-12",
-                rarity: "Rare"
+                owner: "0x7890C3d4..."
             },
             { 
                 name: "@alpha", 
-                price: "90 TON", 
+                price: "90", 
                 image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=300&fit=crop",
                 tonAddress: "alpha.ton",
-                owner: "0x1234E5f6...",
-                created: "2024-01-11",
-                rarity: "Common"
+                owner: "0x1234E5f6..."
             },
             { 
                 name: "@omega", 
-                price: "95 TON", 
+                price: "95", 
                 image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
                 tonAddress: "omega.ton",
-                owner: "0x5678G9h0...",
-                created: "2024-01-10",
-                rarity: "Common"
+                owner: "0x5678G9h0..."
             },
             { 
                 name: "@gold", 
-                price: "250 TON", 
+                price: "250", 
                 image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=400&h=300&fit=crop",
                 tonAddress: "gold.ton",
-                owner: "0x9101J2k3...",
-                created: "2024-01-09",
-                rarity: "Legendary"
+                owner: "0x9101J2k3..."
             },
             { 
                 name: "@diamond", 
-                price: "300 TON", 
+                price: "300", 
                 image: "https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=400&h=300&fit=crop",
                 tonAddress: "diamond.ton",
-                owner: "0x2345L6m7...",
-                created: "2024-01-08",
-                rarity: "Mythic"
+                owner: "0x2345L6m7..."
+            },
+            { 
+                name: "@pro", 
+                price: "175", 
+                image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+                tonAddress: "pro.ton",
+                owner: "0x3456M7n8..."
             }
         ];
 
@@ -977,8 +1003,7 @@
 
             const filteredUsernames = usernames.filter(username => 
                 username.name.toLowerCase().includes(searchTerm) ||
-                username.tonAddress.toLowerCase().includes(searchTerm) ||
-                username.rarity.toLowerCase().includes(searchTerm)
+                username.tonAddress.toLowerCase().includes(searchTerm)
             );
 
             if (filteredUsernames.length === 0) {
@@ -1027,25 +1052,20 @@
                     </div>
                     <div class="username-name">${username.name}</div>
                     <div class="username-ton">${username.tonAddress}</div>
-                    <div class="username-price">${username.price}</div>
+                    <div class="username-price">
+                        <div class="ton-icon">T</div>
+                        ${username.price} TON
+                    </div>
                     
                     <div class="username-details">
                         <div class="detail-item">
                             <span class="detail-label">Владелец:</span>
                             <span class="detail-value">${username.owner}</span>
                         </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Редкость:</span>
-                            <span class="detail-value">${username.rarity}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Создан:</span>
-                            <span class="detail-value">${username.created}</span>
-                        </div>
                     </div>
                     
                     <button class="buy-btn" onclick="handleBuyClick('${username.name}')">
-                        Купить сейчас
+                        Купить
                     </button>
                 `;
                 grid.appendChild(card);
