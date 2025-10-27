@@ -239,7 +239,7 @@
             color: #4cc9f0;
         }
 
-        /* Usernames Grid - ИЗМЕНЕНО: 3 колонки */
+        /* Usernames Grid - 3 колонки */
         .usernames-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -323,16 +323,9 @@
         }
 
         .ton-icon {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #0088cc, #00aaff);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-            color: white;
+            width: 24px;
+            height: 24px;
+            background: url('https://cryptologos.cc/logos/toncoin-ton-logo.png') center/contain no-repeat;
         }
 
         .buy-btn {
@@ -555,7 +548,7 @@
             color: #e0e7ff;
         }
 
-        /* Username Details - УДАЛЕНО: редкость и дата создания */
+        /* Username Details */
         .username-details {
             margin-top: 15px;
             padding-top: 15px;
@@ -903,11 +896,11 @@
     </div>
 
     <script>
-        // Конфигурация бота - ИСПРАВЛЕНО: теперь используется команда /verify
+        // Конфигурация бота
         const BOT_USERNAME = "UsersMarketRubot";
-        const START_COMMAND = "verify"; // Теперь используется /verify вместо /start
+        const START_COMMAND = "verify";
 
-        // Пример данных юзернеймов с фотографиями и TON адресами
+        // Пример данных юзернеймов
         const usernames = [
             { 
                 name: "@premium", 
@@ -1053,8 +1046,8 @@
                     <div class="username-name">${username.name}</div>
                     <div class="username-ton">${username.tonAddress}</div>
                     <div class="username-price">
-                        <div class="ton-icon">T</div>
-                        ${username.price} TON
+                        <div class="ton-icon"></div>
+                        ${username.price}
                     </div>
                     
                     <div class="username-details">
