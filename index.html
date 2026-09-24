@@ -3,122 +3,37 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>Gift Arena</title>
+<title>Gift Up</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-:root{--bg:#07111f;--panel:#0d1b2d;--panel2:#10243b;--line:#1d3a5a;--text:#f5f9ff;--muted:#7f9bb8;--blue:#2196ff;--cyan:#4cc9ff;--green:#35df9b;--danger:#ff5577}
-*{box-sizing:border-box}html,body{margin:0;background:radial-gradient(circle at 50% -10%,#12385d 0,#07111f 45%);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100%;-webkit-tap-highlight-color:transparent}
-body{padding-bottom:92px}.app{max-width:620px;margin:auto;padding:14px 14px 0}.top{display:flex;align-items:center;justify-content:space-between;margin:4px 2px 16px}.brand{font-weight:800;font-size:20px;letter-spacing:-.4px}.wallet{background:#102944;border:1px solid #1c4163;border-radius:13px;padding:8px 11px;font-size:13px;color:#bfe6ff}.wallet b{color:#fff}
-.page{display:none}.page.active{display:block;animation:in .2s ease}@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.hero{background:linear-gradient(145deg,#12385e,#0b1e34 55%,#0a1727);border:1px solid #20517c;border-radius:22px;padding:18px;position:relative;overflow:hidden;box-shadow:0 16px 45px #0004}.hero:after{content:"";position:absolute;width:170px;height:170px;right:-65px;top:-70px;background:#2196ff33;border-radius:50%;filter:blur(5px)}.hero h1{margin:0 0 7px;font-size:25px}.hero p{margin:0;color:#9fc0dc;font-size:13px;line-height:1.45}.section-title{display:flex;justify-content:space-between;align-items:center;margin:22px 2px 10px;font-size:15px;font-weight:800}.section-title span{font-size:12px;color:var(--muted);font-weight:600}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}.game{background:linear-gradient(145deg,#10243a,#0c192a);border:1px solid #1b3c5d;border-radius:18px;padding:13px;min-height:135px;position:relative;overflow:hidden}.game .emoji{font-size:31px}.game h3{margin:10px 0 3px;font-size:15px}.game p{margin:0;color:#7593ae;font-size:11px}.game .go{position:absolute;right:11px;bottom:11px;color:#63caff;font-size:12px;font-weight:700}
-.pill-tabs{display:flex;background:#0b1929;border:1px solid #18334e;border-radius:13px;padding:4px;margin:14px 0}.pill-tabs button{flex:1;background:transparent;border:0;color:#6e8ca8;padding:9px;border-radius:9px;font-weight:700}.pill-tabs button.active{background:#1c88e5;color:white}
-.gift-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.gift{background:#0d1c2d;border:1px solid #1b3853;border-radius:15px;padding:9px;text-align:center}.gift-art{height:76px;border-radius:11px;background:linear-gradient(145deg,#123a62,#0c2036);display:flex;align-items:center;justify-content:center;font-size:35px}.gift b{display:block;font-size:12px;margin-top:8px}.gift small{color:#72a5c9;font-size:10px}
-.profile{background:linear-gradient(145deg,#102844,#0b1a2b);border:1px solid #1e4569;border-radius:22px;padding:20px;text-align:center}.avatar{width:84px;height:84px;border-radius:50%;object-fit:cover;border:3px solid #2b9df5;margin-bottom:10px;background:#173451}.name{font-size:20px;font-weight:800}.username{color:#63c1f5;font-size:13px;margin-top:3px}.ids{display:flex;justify-content:center;gap:7px;margin-top:12px;flex-wrap:wrap}.chip{background:#0a1726;border:1px solid #1d3a56;color:#8eabc4;padding:6px 9px;border-radius:9px;font-size:11px}.balance-card{margin-top:14px;background:#081727;border:1px solid #1a3854;border-radius:16px;padding:14px;text-align:left}.balance-card .label{color:#6f8ba4;font-size:11px}.balance-card strong{display:block;font-size:26px;margin-top:4px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.btn{border:0;border-radius:13px;padding:12px;font-weight:800;color:white;background:#147bd0}.btn.secondary{background:#102a43;border:1px solid #245275;color:#a9d9fb}
-.history{display:flex;flex-direction:column;gap:8px}.row{display:flex;align-items:center;gap:10px;background:#0c1b2c;border:1px solid #17334e;border-radius:14px;padding:11px}.dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 9px #35df9b}.row .main{flex:1}.row b{font-size:12px}.row small{display:block;color:#68859e;margin-top:3px}.row .amount{font-weight:800;color:#bde9ff}
-.deposit{background:linear-gradient(145deg,#0f3150,#0b1c2d);border:1px solid #1f527c;border-radius:20px;padding:18px}.deposit h2{margin:0 0 6px}.deposit p{color:#7f9eb8;font-size:13px;line-height:1.45}.amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}.amounts button{background:#0b1b2b;border:1px solid #21415f;color:#a9d8f7;border-radius:11px;padding:11px;font-weight:800}.amounts button.sel{border-color:#2aa5ff;background:#123758;color:white}.input{width:100%;padding:13px;border-radius:12px;background:#071421;border:1px solid #20405e;color:white;outline:0;margin-bottom:10px}.notice{font-size:11px;color:#7896af;line-height:1.4;margin-top:10px}
-.nav{position:fixed;z-index:20;left:50%;transform:translateX(-50%);bottom:10px;width:min(590px,calc(100% - 18px));display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:7px;background:#081522ed;border:1px solid #1b3852;border-radius:20px;backdrop-filter:blur(18px);box-shadow:0 10px 40px #0008}.nav button{border:0;background:transparent;color:#65819b;border-radius:14px;padding:8px 4px;font-size:10px;font-weight:700}.nav button.active{background:#10365a;color:#67c6ff}.nav i{display:block;font-style:normal;font-size:19px;margin-bottom:3px}
-.toast{position:fixed;z-index:50;left:50%;bottom:100px;transform:translate(-50%,20px);opacity:0;background:#10283f;border:1px solid #2a5a81;padding:11px 14px;border-radius:12px;font-size:12px;transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(min-width:500px){.app{padding-top:22px}.cards{grid-template-columns:repeat(3,1fr)}.gift-grid{grid-template-columns:repeat(4,1fr)}}
-</style>
-</head>
-<body>
-<div class="app">
-<header class="top"><div class="brand">GIFT <span style="color:#36aaff">ARENA</span></div><div class="wallet">Баланс <b id="topBalance">0.00</b> G</div></header>
-
-<section id="play" class="page active">
-<div class="hero"><h1>Играй на подарках</h1><p>Создавай игровые комнаты, добавляй подарки и соревнуйся с другими игроками.</p></div>
-<div class="section-title">Режимы игры <span>Демо-режим</span></div>
-<div class="cards">
-<div class="game" onclick="toast('Режим «Арена» открыт')"><div class="emoji">⚔️</div><h3>Арена</h3><p>Собери банк и определи победителя.</p><span class="go">Играть →</span></div>
-<div class="game" onclick="toast('Режим «Апгрейд» открыт')"><div class="emoji">🚀</div><h3>Апгрейд</h3><p>Рискни подарком ради более редкого.</p><span class="go">Открыть →</span></div>
-<div class="game" onclick="toast('Режим «Мини» открыт')"><div class="emoji">🎯</div><h3>Мини</h3><p>Быстрые короткие раунды.</p><span class="go">Играть →</span></div>
-<div class="game" onclick="toast('Конкурсы скоро')"><div class="emoji">🏆</div><h3>Конкурсы</h3><p>События и специальные комнаты.</p><span class="go">Смотреть →</span></div>
-</div>
-<div class="section-title">Последние игры <span>Все →</span></div>
-<div class="history" id="history"></div>
-</section>
-
-<section id="deposit" class="page">
-<div class="deposit"><h2>Пополнение</h2><p>В этом прототипе используется виртуальный игровой баланс. Реальные платежи подключаются отдельным серверным модулем.</p>
-<div class="amounts"><button onclick="setAmount(100)">100 G</button><button onclick="setAmount(500)">500 G</button><button onclick="setAmount(1000)">1K G</button></div>
-<input class="input" id="amount" type="number" placeholder="Сумма, G"><button class="btn" style="width:100%" onclick="addDemoBalance()">Пополнить демо-баланс</button>
-<div class="notice">Никогда не храните платёжные ключи или секреты в клиентском коде Mini App.</div></div>
-</section>
-
-<section id="stats" class="page">
-<div class="section-title">Статистика</div>
-<div class="cards">
-<div class="game"><p>Игр сыграно</p><h3 style="font-size:24px">24</h3><p>за всё время</p></div>
-<div class="game"><p>Побед</p><h3 style="font-size:24px">13</h3><p>54% раундов</p></div>
-<div class="game"><p>Подарков</p><h3 style="font-size:24px">47</h3><p>в инвентаре</p></div>
-</div>
-<div class="section-title">История</div><div class="history" id="statsHistory"></div>
-</section>
-
-<section id="profile" class="page">
-<div class="profile">
-<img id="avatar" class="avatar" src="" alt="">
-<div id="name" class="name">Telegram User</div><div id="username" class="username">@username</div>
-<div class="ids"><span class="chip" id="tgid">ID: —</span><span class="chip">Telegram Mini App</span></div>
-<div class="balance-card"><span class="label">Игровой баланс</span><strong><span id="profileBalance">0.00</span> G</strong></div>
-<div class="actions"><button class="btn" onclick="go('deposit')">Пополнить</button><button class="btn secondary" onclick="toast('Настройки профиля скоро')">Настройки</button></div>
-</div>
-<div class="section-title">Мой инвентарь <span id="inventoryCount">6 подарков</span></div>
-<div class="gift-grid">
-<div class="gift"><div class="gift-art">🎁</div><b>Blue Gift</b><small>3.42 G</small></div>
-<div class="gift"><div class="gift-art">🍭</div><b>Lol Pop</b><small>3.62 G</small></div>
-<div class="gift"><div class="gift-art">💎</div><b>Crystal</b><small>5.80 G</small></div>
-<div class="gift"><div class="gift-art">🎨</div><b>Rainbow</b><small>7.10 G</small></div>
-<div class="gift"><div class="gift-art">🧸</div><b>Bear</b><small>2.90 G</small></div>
-<div class="gift"><div class="gift-art">👑</div><b>Crown</b><small>12.00 G</small></div>
-</div>
-</section>
-</div>
-
-<nav class="nav">
-<button class="active" data-page="play" onclick="go('play')"><i>🎮</i>Играть</button>
-<button data-page="deposit" onclick="go('deposit')"><i>💳</i>Пополнить</button>
-<button data-page="stats" onclick="go('stats')"><i>📊</i>Статистика</button>
-<button data-page="profile" onclick="go('profile')"><i>👤</i>Профиль</button>
-</nav>
-<div id="toast" class="toast"></div>
-
+:root{--bg:#06111f;--panel:#0b1b2c;--panel2:#102944;--line:#1b3c5b;--text:#f5f9ff;--muted:#7893ad;--blue:#269cff;--cyan:#67d0ff;--green:#37dfa1}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,#174b78 0,#06111f 43%);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}body{padding-bottom:94px}.app{width:min(620px,100%);margin:auto;padding:14px}.top{display:flex;align-items:center;justify-content:space-between;margin:2px 1px 16px}.brand{font-size:21px;font-weight:900;letter-spacing:-.7px}.brand span{color:var(--cyan)}.wallet{padding:8px 11px;border:1px solid #1d4567;background:#0d2740;border-radius:13px;font-size:12px;color:#a9c8df}.wallet b{color:#fff}.page{display:none}.page.active{display:block;animation:show .18s ease}@keyframes show{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.hero,.card,.profile,.deposit{border:1px solid var(--line);background:linear-gradient(145deg,#102b47,#091a2b);border-radius:22px;box-shadow:0 18px 50px #0005}.hero{padding:19px;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:-55px;top:-65px;width:170px;height:170px;border-radius:50%;background:#249cff30;filter:blur(7px)}h1{font-size:26px;margin:0 0 7px;position:relative;z-index:1}.sub{margin:0;color:#9bb9d2;font-size:13px;line-height:1.45;position:relative;z-index:1}.title{display:flex;justify-content:space-between;align-items:center;margin:21px 2px 10px;font-weight:850;font-size:15px}.title span{color:var(--muted);font-size:11px;font-weight:650}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.game{min-height:145px;padding:14px;border-radius:18px;border:1px solid #1b3d5c;background:linear-gradient(145deg,#102640,#0a1929);position:relative;overflow:hidden;cursor:pointer}.game-art{height:60px;width:60px;object-fit:contain;border-radius:15px;display:block;background:#0a1c2f;margin-bottom:9px}.game h3{font-size:15px;margin:0 0 4px}.game p{margin:0;color:#7593ad;font-size:11px;line-height:1.35}.go{position:absolute;right:11px;bottom:11px;color:#64caff;font-size:12px;font-weight:800}.history{display:flex;flex-direction:column;gap:8px}.row{display:flex;align-items:center;gap:10px;padding:11px;border-radius:14px;border:1px solid #173650;background:#0b1a2b}.row-art{width:34px;height:34px;border-radius:10px;object-fit:cover}.main{flex:1}.main b{font-size:12px}.main small{display:block;color:#6f8ba3;margin-top:3px}.amount{font-size:12px;font-weight:850;color:#bceaff}.nav{position:fixed;z-index:20;left:50%;bottom:9px;transform:translateX(-50%);width:min(590px,calc(100% - 18px));display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:7px;border:1px solid #1a3954;border-radius:20px;background:#071522eF;backdrop-filter:blur(18px);box-shadow:0 12px 45px #0008}.nav button{border:0;background:transparent;color:#67839c;border-radius:14px;padding:8px 3px;font-size:10px;font-weight:750}.nav button.active{background:#10385d;color:#6acbff}.nav i{display:block;font-style:normal;font-size:18px;margin-bottom:3px}.profile{padding:20px;text-align:center}.avatar{width:84px;height:84px;border-radius:50%;object-fit:cover;border:3px solid var(--blue);background:#163650;margin-bottom:10px}.name{font-size:20px;font-weight:900}.username{font-size:13px;color:#62c8ff;margin-top:3px}.chips{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin-top:12px}.chip{padding:6px 9px;border-radius:9px;background:#091827;border:1px solid #1b3853;color:#8ca8bf;font-size:11px}.balance{margin-top:14px;padding:14px;text-align:left;border-radius:16px;background:#071624;border:1px solid #193752}.balance small{color:#6d899f}.balance strong{display:block;font-size:27px;margin-top:3px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.btn{width:100%;border:0;border-radius:13px;padding:12px;font-weight:850;color:#fff;background:#147fd8}.btn.alt{background:#102b44;border:1px solid #255174;color:#a9d9f7}.gift-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.gift{padding:9px;border:1px solid #1a3852;border-radius:15px;background:#0b1a2a;text-align:center}.gift-img{width:100%;aspect-ratio:1;border-radius:11px;object-fit:cover;background:#102a44}.gift b{display:block;font-size:11px;margin-top:7px}.gift small{color:#70a5c7;font-size:10px}.deposit{padding:18px}.deposit h2{margin:0 0 5px}.deposit p{color:#7e9bb4;font-size:13px;line-height:1.45}.amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}.amounts button{border:1px solid #214461;background:#091a2a;color:#a9d9f7;border-radius:11px;padding:11px;font-weight:800}.input{width:100%;padding:13px;border-radius:12px;background:#061421;border:1px solid #21415d;color:#fff;outline:0;margin-bottom:10px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stat{padding:14px;border:1px solid #1a3a58;border-radius:17px;background:linear-gradient(145deg,#102640,#0a1929)}.stat small{color:#708ba4}.stat strong{display:block;font-size:23px;margin-top:5px}.toast{position:fixed;z-index:50;left:50%;bottom:103px;transform:translate(-50%,18px);opacity:0;padding:11px 14px;border-radius:12px;background:#102a43;border:1px solid #285a82;font-size:12px;transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}
+</style></head>
+<body><div class="app">
+<header class="top"><div class="brand">GIFT <span>UP</span></div><div class="wallet">Баланс <b id="balanceTop">0.00</b> G</div></header>
+<section id="play" class="page active"><div class="hero"><h1>Игровая арена</h1><p>Выбирай режим, собирай комнату и играй с другими пользователями на виртуальные подарки.</p></div><div class="title">Игры <span id="roomsLabel">4 режима</span></div><div class="grid" id="games"></div><div class="title">Последние игры <span>обновляется сразу</span></div><div class="history" id="history"></div></section>
+<section id="deposit" class="page"><div class="deposit"><h2>Пополнение</h2><p>Игровой баланс работает внутри демо-версии. Реальные платежи здесь не подключаются.</p><div class="amounts"><button onclick="amount(100)">100 G</button><button onclick="amount(500)">500 G</button><button onclick="amount(1000)">1K G</button></div><input id="sum" class="input" type="number" min="1" placeholder="Сумма, G"><button class="btn" onclick="deposit()">Пополнить баланс</button></div></section>
+<section id="stats" class="page"><div class="title">Моя статистика</div><div class="stats"><div class="stat"><small>Игр</small><strong id="gamesPlayed">0</strong></div><div class="stat"><small>Побед</small><strong id="wins">0</strong></div><div class="stat"><small>Подарков</small><strong id="giftCount">6</strong></div></div><div class="title">История матчей</div><div class="history" id="statsHistory"></div></section>
+<section id="profile" class="page"><div class="profile"><img id="avatar" class="avatar" alt=""><div id="name" class="name">Telegram User</div><div id="username" class="username">@username</div><div class="chips"><span class="chip" id="tgid">ID: —</span><span class="chip">Telegram Mini App</span></div><div class="balance"><small>Игровой баланс</small><strong><span id="balanceProfile">0.00</span> G</strong></div><div class="actions"><button class="btn" onclick="go('deposit')">Пополнить</button><button class="btn alt" onclick="toast('Профиль готов к подключению')">Настройки</button></div></div><div class="title">Инвентарь <span>6 подарков</span></div><div class="gift-grid" id="inventory"></div></section></div>
+<nav class="nav"><button class="active" data-page="play" onclick="go('play')"><i>⌂</i>Играть</button><button data-page="deposit" onclick="go('deposit')"><i>＋</i>Пополнить</button><button data-page="stats" onclick="go('stats')"><i>◈</i>Статистика</button><button data-page="profile" onclick="go('profile')"><i>◎</i>Профиль</button></nav><div id="toast" class="toast"></div>
 <script>
-const tg=window.Telegram?.WebApp;
-if(tg){tg.ready();tg.expand();tg.setHeaderColor('#07111f');tg.setBackgroundColor('#07111f')}
-let balance=0;
+const tg=window.Telegram?.WebApp; if(tg){tg.ready();tg.expand();tg.setHeaderColor('#06111f');tg.setBackgroundColor('#06111f')}
+const state={balance:Number(localStorage.getItem('giftup_balance')||0),games:Number(localStorage.getItem('giftup_games')||0),wins:Number(localStorage.getItem('giftup_wins')||0),history:JSON.parse(localStorage.getItem('giftup_history')||'[]')};
+const assets=['https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=400&q=80','https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=400&q=80','https://images.unsplash.com/photo-1575361204480-aadea25e6e68?auto=format&fit=crop&w=400&q=80','https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=400&q=80','https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80','https://images.unsplash.com/photo-1511381939415-e44015466834?auto=format&fit=crop&w=400&q=80'];
+const gifts=[['Blue Box',3.42],['Lol Pop',3.62],['Crystal',5.80],['Rainbow',7.10],['Bear',2.90],['Crown',12]];
+const modes=[['Арена','Собери банк и сыграй раунд','arena',assets[0]],['Апгрейд','Обменяй подарок на более редкий','upgrade',assets[1]],['Мини-игра','Быстрый случайный раунд','mini',assets[2]],['Комнаты','Создай или присоединись к комнате','rooms',assets[3]]];
 function user(){return tg?.initDataUnsafe?.user||null}
-function init(){
- const u=user();
- const name=u?.first_name ? [u.first_name,u.last_name].filter(Boolean).join(' ') : 'Telegram User';
- document.getElementById('name').textContent=name;
- document.getElementById('username').textContent=u?.username?'@'+u.username:'@username';
- document.getElementById('tgid').textContent='ID: '+(u?.id||'—');
- const av=document.getElementById('avatar');
- if(u?.photo_url){av.src=u.photo_url}else{av.style.display='none'}
- renderHistory();
-}
-function go(page){
- document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
- document.getElementById(page).classList.add('active');
- document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));
- window.scrollTo({top:0,behavior:'smooth'});
-}
-function setAmount(n){document.getElementById('amount').value=n}
-function addDemoBalance(){
- const n=Number(document.getElementById('amount').value);
- if(!n||n<1)return toast('Введите сумму');
- balance+=n;renderBalance();toast('Демо-баланс пополнен на '+n+' G');
-}
-function renderBalance(){document.getElementById('topBalance').textContent=balance.toFixed(2);document.getElementById('profileBalance').textContent=balance.toFixed(2)}
-function renderHistory(){
- const data=[['#443798','Победа в Арена','+22.55 G'],['#443791','Участие в Мини','-4.07 G'],['#443786','Победа в Арена','+18.98 G'],['#443781','Участие в Апгрейд','-3.42 G']];
- const html=data.map(x=>'<div class="row"><span class="dot"></span><div class="main"><b>'+x[1]+'</b><small>'+x[0]+'</small></div><span class="amount">'+x[2]+'</span></div>').join('');
- document.getElementById('history').innerHTML=html;document.getElementById('statsHistory').innerHTML=html;
-}
-let toastTimer;function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),1800)}
-init();renderBalance();
-</script>
-</body>
-</html>
+function init(){const u=user();document.getElementById('name').textContent=u?[u.first_name,u.last_name].filter(Boolean).join(' '):'Telegram User';document.getElementById('username').textContent=u?.username?'@'+u.username:'@username';document.getElementById('tgid').textContent='ID: '+(u?.id||'—');if(u?.photo_url)document.getElementById('avatar').src=u.photo_url;else document.getElementById('avatar').style.display='none';renderGames();renderInventory();renderAll()}
+function save(){localStorage.setItem('giftup_balance',state.balance);localStorage.setItem('giftup_games',state.games);localStorage.setItem('giftup_wins',state.wins);localStorage.setItem('giftup_history',JSON.stringify(state.history.slice(0,20)))}
+function renderGames(){document.getElementById('games').innerHTML=modes.map(m=>`<article class="game" onclick="play('${m[2]}')"><img class="game-art" src="${m[3]}" alt=""><h3>${m[0]}</h3><p>${m[1]}</p><span class="go">Открыть →</span></article>`).join('')}
+function renderInventory(){document.getElementById('inventory').innerHTML=gifts.map((g,i)=>`<div class="gift"><img class="gift-img" src="${assets[i]}" alt="${g[0]}"><b>${g[0]}</b><small>${g[1].toFixed(2)} G</small></div>`).join('')}
+function renderAll(){document.getElementById('balanceTop').textContent=state.balance.toFixed(2);document.getElementById('balanceProfile').textContent=state.balance.toFixed(2);document.getElementById('gamesPlayed').textContent=state.games;document.getElementById('wins').textContent=state.wins;renderHistory()}
+function renderHistory(){const html=state.history.length?state.history.map(x=>`<div class="row"><img class="row-art" src="${x.img}" alt=""><div class="main"><b>${x.title}</b><small>${x.time}</small></div><div class="amount">${x.result}</div></div>`).join(''):'<div class="row"><div class="main"><b>Пока нет игр</b><small>Запусти любой режим выше</small></div></div>';document.getElementById('history').innerHTML=html;document.getElementById('statsHistory').innerHTML=html}
+function go(page){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(page).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));scrollTo({top:0,behavior:'smooth'})}
+function amount(n){document.getElementById('sum').value=n}
+function deposit(){const n=Number(document.getElementById('sum').value);if(!n||n<1)return toast('Введите сумму');state.balance+=n;save();renderAll();toast('Баланс увеличен на '+n+' G')}
+function play(mode){const names={arena:'Арена',upgrade:'Апгрейд',mini:'Мини-игра',rooms:'Комната'};const cost=mode==='upgrade'?25:10;if(state.balance<cost)return toast('Нужно минимум '+cost+' G');state.balance-=cost;state.games++;const win=Math.random()>.48;if(win){state.wins++;state.balance+=cost*2}state.history.unshift({title:names[mode],time:new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}),result:win?'Победа +'+(cost)+' G':'Раунд −'+cost+' G',img:assets[Math.floor(Math.random()*assets.length)]});save();renderAll();toast(win?'Победа! Баланс увеличен':'Раунд завершён');go('play')}
+let toastTimer;function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),1800)}
+init();
+</script></body></html>
